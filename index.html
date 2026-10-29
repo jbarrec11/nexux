@@ -8,39 +8,45 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
     <style>
+        /* Fondo general */
         #bgMosaic { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; background-color: #16121d; }
-        .mosaic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; width: 120%; height: 120%; position: absolute; top: -10%; left: -10%; filter: blur(4px) brightness(0.4) saturate(1.2); transform: scale(1.05); animation: slideMosaic 60s linear infinite alternate; }
+        .mosaic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; width: 120%; height: 120%; position: absolute; top: -10%; left: -10%; filter: blur(4px) brightness(0.3) saturate(1.2); transform: scale(1.05); animation: slideMosaic 60s linear infinite alternate; }
         .mosaic-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; opacity: 0.8; }
-        .mosaic-fade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(22,18,29,0.3) 0%, rgba(22,18,29,0.8) 50%, rgba(22,18,29,1) 100%); }
+        .mosaic-fade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(22,18,29,0.5) 0%, rgba(22,18,29,0.9) 50%, rgba(22,18,29,1) 100%); }
         @keyframes slideMosaic { 0% { transform: translateY(0) scale(1.05); } 100% { transform: translateY(-5%) scale(1.05); } }
         
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
+        /* Efectos Neón */
         .text-neon-1 { text-shadow: 0 0 10px #ff0044, 0 0 20px #ff0044; color: #ff0044; }
         .text-neon-2 { text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00; color: #ffcc00; }
         .text-neon-3 { text-shadow: 0 0 10px #00ff44, 0 0 20px #00ff44; color: #00ff44; }
         .text-neon-4 { text-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff; color: #00ccff; }
         .text-neon-5 { text-shadow: 0 0 10px #aa00ff, 0 0 20px #aa00ff; color: #aa00ff; }
         
+        /* Tarjetas */
         .card-poster { aspect-ratio: 2/3; border-radius: 10px; overflow: hidden; position: relative; transition: transform 0.3s; }
         .card-poster:hover { transform: scale(1.05); z-index: 10; border-color: #ec4899; }
         
         #top10Container { scroll-snap-type: none; }
         .fi { display: inline-block; width: 1.2em; height: 0.9em; background-size: contain; background-position: 50%; background-repeat: no-repeat; vertical-align: middle; border-radius: 2px; }
-        
-        /* Estilos para el Select de Países (Diseño oscuro) */
+
+        /* CORRECCIÓN: Selector de país oscuro */
         select#filtro-pais {
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            background: transparent;
-            color: #e5e7eb;
-            padding-right: 1.5rem;
+            background-color: transparent;
+            color: #f4f1ff;
+            border: none;
+            outline: none;
+            cursor: pointer;
         }
         select#filtro-pais option {
-            background-color: #1f2937; /* Fondo oscuro para el menú */
-            color: #f4f1ff;
+            background-color: #1f2937; /* Fondo oscuro para las opciones */
+            color: #ffffff;
+            padding: 10px;
         }
     </style>
 </head>
@@ -53,7 +59,7 @@
     </div>
 
     <!-- HEADER -->
-    <header class="border-b border-gray-800 bg-[#16121d]/90 backdrop-blur-md sticky top-0 z-50">
+    <header class="border-b border-gray-800 bg-[#16121d]/95 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <h1 onclick="irAInicio()" class="text-pink-500 font-black text-2xl tracking-widest cursor-pointer hover:text-pink-400 transition">MI MARCA</h1>
             <nav class="hidden md:flex gap-6 text-sm font-semibold text-gray-400">
@@ -69,7 +75,7 @@
         
         <!-- HERO -->
         <section class="mb-10">
-            <div class="bg-[#1a1a1f]/80 backdrop-blur-md rounded-2xl overflow-hidden flex flex-col md:flex-row border border-gray-700/50 relative h-[300px] shadow-2xl">
+            <div class="bg-[#1a1a1f]/90 backdrop-blur-md rounded-2xl overflow-hidden flex flex-col md:flex-row border border-gray-700/50 relative h-[300px] shadow-2xl">
                 <div class="w-full md:w-1/4 h-full relative bg-black">
                     <img id="hero-img" src="" class="w-full h-full object-cover transition-opacity duration-500 opacity-100" alt="Destacado">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent to-[#1a1a1f] hidden md:block"></div>
@@ -88,7 +94,7 @@
 
         <!-- TOP 10 -->
         <section class="mb-10 relative">
-            <div class="flex justify-between items-end mb-4 bg-[#16121d]/80 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
+            <div class="flex justify-between items-end mb-4 bg-[#16121d]/90 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
                 <h2 class="text-pink-500 font-black text-xl flex items-center gap-2 uppercase tracking-widest">🏆 Top 10 Más Vistos</h2>
             </div>
             <div id="top10Container" class="overflow-x-auto pt-4 pb-8 no-scrollbar w-full">
@@ -98,7 +104,7 @@
 
         <!-- FILTROS Y GRID -->
         <section class="mb-12">
-            <div class="flex justify-between items-center mb-4 bg-[#16121d]/80 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
+            <div class="flex justify-between items-center mb-4 bg-[#16121d]/90 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
                 <h2 class="text-white font-bold text-xl flex items-center gap-2">Explorar</h2>
             </div>
             
@@ -112,9 +118,9 @@
                 </div>
                 
                 <!-- Selector de País Mejorado -->
-                <div class="relative flex items-center gap-2 bg-gray-800/80 rounded-full px-4 py-1 border border-gray-700 hover:border-pink-500 transition-colors">
+                <div class="relative flex items-center gap-2 bg-gray-800/90 rounded-full px-4 py-1.5 border border-gray-600 hover:border-pink-500 transition-colors">
                     <i class="fas fa-globe text-pink-500 text-sm"></i>
-                    <select id="filtro-pais" onchange="aplicarFiltros()" class="bg-transparent text-gray-200 text-sm font-semibold outline-none cursor-pointer w-40">
+                    <select id="filtro-pais" onchange="aplicarFiltros()" class="bg-transparent text-white text-sm font-semibold w-40">
                         <option value="">Todos los países</option>
                         <option value="CO">🇨🇴 Colombia</option>
                         <option value="US">🇺🇸 Estados Unidos</option>
@@ -142,7 +148,7 @@
     <!-- VISTA 2: DETALLE -->
     <main id="vista-detalle" class="max-w-7xl mx-auto p-4 md:p-8 hidden relative z-10 flex-grow w-full">
         <div class="flex justify-between items-center mb-4">
-            <button onclick="irAInicio()" class="text-gray-400 hover:text-white flex items-center gap-2 text-sm font-bold transition bg-[#16121d]/80 px-4 py-2 rounded-lg w-fit">
+            <button onclick="irAInicio()" class="text-gray-400 hover:text-white flex items-center gap-2 text-sm font-bold transition bg-[#16121d]/90 px-4 py-2 rounded-lg w-fit">
                 <i class="fas fa-arrow-left"></i> Volver al inicio
             </button>
             <div class="flex items-center gap-3">
@@ -175,22 +181,22 @@
         </div>
     </main>
 
-    <!-- FOOTER COMPLETO Y FUNCIONAL -->
-    <footer class="bg-[#0f0c15] border-t border-gray-800 mt-12 py-10 relative z-10">
+    <!-- FOOTER COMPLETO Y FUNCIONAL (CON FONDO SÓLIDO) -->
+    <footer class="bg-[#0b0910] border-t border-gray-800 mt-12 py-10 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-8">
                 <div>
                     <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras por edad</h4>
-                    <ul class="space-y-2 text-xs text-gray-400">
+                    <ul class="space-y-2 text-sm text-gray-300">
                         <li><a href="#" onclick="filtrarPorTag('18-21'); return false;" class="hover:text-pink-400 transition">Cámaras de 18 a 21 años</a></li>
                         <li><a href="#" onclick="filtrarPorTag('20-30'); return false;" class="hover:text-pink-400 transition">Cámaras de 20 a 30 años</a></li>
                         <li><a href="#" onclick="filtrarPorTag('30-50'); return false;" class="hover:text-pink-400 transition">Cámaras de 30 a 50 años</a></li>
-                        <li><a href="#" onclick="filtrarPorTag('mature'); return false;" class="hover:text-pink-400 transition">Cámaras de maduras (más de 50 años)</a></li>
+                        <li><a href="#" onclick="filtrarPorTag('mature'); return false;" class="hover:text-pink-400 transition">Cámaras de maduras (+50)</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras por región</h4>
-                    <ul class="space-y-2 text-xs text-gray-400">
+                    <ul class="space-y-2 text-sm text-gray-300">
                         <li><a href="#" onclick="filtrarPorPais('US'); return false;" class="hover:text-pink-400 transition">Cámaras en Norteamérica</a></li>
                         <li><a href="#" onclick="filtrarPorPais('ES'); return false;" class="hover:text-pink-400 transition">Cámaras en Europa</a></li>
                         <li><a href="#" onclick="filtrarPorPais('RU'); return false;" class="hover:text-pink-400 transition">Cámaras en Rusia</a></li>
@@ -199,7 +205,7 @@
                 </div>
                 <div>
                     <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Shows privados</h4>
-                    <ul class="space-y-2 text-xs text-gray-400">
+                    <ul class="space-y-2 text-sm text-gray-300">
                         <li><a href="#" class="hover:text-pink-400 transition">6 tokens por minuto</a></li>
                         <li><a href="#" class="hover:text-pink-400 transition">12-18 tokens por minuto</a></li>
                         <li><a href="#" class="hover:text-pink-400 transition">30-42 tokens por minuto</a></li>
@@ -208,7 +214,7 @@
                 </div>
                 <div>
                     <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Por estado</h4>
-                    <ul class="space-y-2 text-xs text-gray-400">
+                    <ul class="space-y-2 text-sm text-gray-300">
                         <li><a href="#" class="hover:text-pink-400 transition">Shows privados</a></li>
                         <li><a href="#" class="hover:text-pink-400 transition">Cámaras nuevas</a></li>
                         <li><a href="#" class="hover:text-pink-400 transition">Cámaras de videojuegos</a></li>
@@ -216,7 +222,7 @@
                 </div>
                 <div>
                     <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras gratis</h4>
-                    <ul class="space-y-2 text-xs text-gray-400">
+                    <ul class="space-y-2 text-sm text-gray-300">
                         <li><a href="#" onclick="filtrar('f'); return false;" class="hover:text-pink-400 transition">Cámaras de mujeres</a></li>
                         <li><a href="#" onclick="filtrar('m'); return false;" class="hover:text-pink-400 transition">Cámaras de hombres</a></li>
                         <li><a href="#" onclick="filtrar('c'); return false;" class="hover:text-pink-400 transition">Cámaras de parejas</a></li>
@@ -226,7 +232,7 @@
             </div>
             
             <div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-gray-500">
+                <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-gray-400">
                     <a href="#" class="hover:text-white transition">Seguridad y consentimiento</a>
                     <span class="text-gray-700">|</span>
                     <a href="#" class="hover:text-white transition">Términos y condiciones</a>
@@ -239,7 +245,7 @@
                     <span class="text-gray-700">|</span>
                     <a href="#" class="hover:text-white transition">DMCA</a>
                 </div>
-                <div class="text-xs text-gray-600">
+                <div class="text-xs text-gray-500">
                     &copy; 2026 Mi Marca. Todos los derechos reservados.
                 </div>
             </div>
@@ -248,8 +254,7 @@
 
     <script>
         const MI_WM = 'q7k3D';
-        const MODO_DESARROLLO = false; 
-
+        
         let modelosGlobales = [];
         let indiceHero = 0;
         let intervaloHero;
@@ -402,19 +407,20 @@
         function filtrarPorPais(codigoPais) {
             document.getElementById('filtro-pais').value = codigoPais;
             aplicarFiltros();
+            // Hacer scroll hacia el grid para ver los resultados
+            document.getElementById('grid-filtros').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         function filtrarPorTag(tag) {
-            // Simulación rápida de búsqueda por tag
-            alert("Buscando cámaras con la etiqueta: " + tag);
-            // Aquí podrías hacer un fetch a tu proxy con &tag=tag
+            // Para simular el filtro de edad, recargamos mostrando un alert (o podrías implementarlo en el proxy)
+            alert("Filtro por etiqueta: " + tag + "\n(Esta función requiere agregar el parámetro 'tag' a tu proxy de Vercel)");
         }
 
         async function aplicarFiltros() {
             const genero = generoActual;
             const pais = document.getElementById('filtro-pais').value;
             const grid = document.getElementById('grid-filtros');
-            grid.innerHTML = '<p class="text-gray-400 col-span-full text-center py-4">Cargando...</p>';
+            grid.innerHTML = '<p class="text-gray-400 col-span-full text-center py-4"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
 
             let queryParams = [];
             if (genero !== 'all') queryParams.push(`gender=${genero}`);
