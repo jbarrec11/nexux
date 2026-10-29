@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Marca - Estilo Muro de Pósters</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Fondo Mosaico Tipo Póster (Lleno de chicas) */
+        #bgMosaic {
+            position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none;
+            background-color: #16121d; 
+        }
+        /* La cuadrícula de imágenes */
+        .mosaic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Tarjetas pequeñas */
+            gap: 10px;
+            width: 120%; height: 120%; /* Más grande para que no se vean los bordes al hacer zoom */
+            position: absolute;
+            top: -10%; left: -10%;
+            filter: blur(4px) brightness(0.4) saturate(1.2); /* Desenfoque y oscurecimiento */
+            transform: scale(1.05);
+            animation: slideMosaic 60s linear infinite alternate; /* Movimiento lento del fondo */
+        }
+        
+        .mosaic-grid img {
+            width: 100%; height: 100%; object-fit: cover;
+            border-radius: 8px;
+            opacity: 0.8;
+        }
+
+        /* Capa de degradado para que el texto resalte */
+        .mosaic-fade {
+            position: absolute; inset: 0; z-index: -1;
+            background: linear-gradient(180deg, rgba(22,18,29,0.3) 0%, rgba(22,18,29,0.8) 50%, rgba(22,18,29,1) 100%);
+        }
+
+        @keyframes slideMosaic {
+            0% { transform: translateY(0) scale(1.05); }
+            100% { transform: translateY(-5%) scale(1.05); }
+        }
+
+        /* Ocultar Scrollbars */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Efectos Neón */
+        .text-neon-1 { text-shadow: 0 0 10px #ff0044, 0 0 20px #ff0044; color: #ff0044; }
+        .text-neon-2 { text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00; color: #ffcc00; }
+        .text-neon-3 { text-shadow: 0 0 10px #00ff44, 0 0 20px #00ff44; color: #00ff44; }
+        .text-neon-4 { text-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff; color: #00ccff; }
+        .text-neon-5 { text-shadow: 0 0 10px #aa00ff, 0 0 20px #aa00ff; color: #aa00ff; }
+
+        /* Tarjetas Verticales (Póster) */
+        .card-poster {
+            aspect-ratio: 2/3;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        .card-poster:hover { transform: scale(1.05); z-index: 10; border-color: #ec4899; }
+
+        #top10Container { scroll-snap-type: none; }
+    </style>
+</head>
+<body class="bg-[#16121d] text-[#f4f1ff] font-sans min-h-screen relative pb-10">
+
+    <!-- FONDO MOSAICO -->
+    <div id="bgMosaic">
+        <div class="mosaic-grid" id="mosaicGrid"></div>
+        <div class="mosaic-fade"></div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="border-b border-gray-800 bg-[#16121d]/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <h1 onclick="irAInicio()" class="text-pink-500 font-black text-2xl tracking-widest cursor-pointer hover:text-pink-400 transition">MI MARCA</h1>
+            <nav class="hidden md:flex gap-6 text-sm font-semibold text-gray-400">
+                <a href="#" onclick="irAInicio()" class="hover:text-white transition" id="nav-inicio">Inicio</a>
+                <a href="#" class="hover:text-white transition" id="nav-categorias">Categorías</a>
+            </nav>
+            <button class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow-lg shadow-pink-600/30" id="btn-ingresar">Ingresar</button>
+        </div>
+    </header>
+
+    <!-- VISTA 1: INICIO -->
+    <main id="vista-inicio" class="max-w-7xl mx-auto p-4 md:p-8 relative z-10">
+        
+        <!-- HERO DINÁMICO -->
+        <section class="mb-10">
+            <div class="bg-[#1a1a1f]/60 backdrop-blur-md rounded-2xl overflow-hidden flex flex-col md:flex-row border border-gray-700/50 relative h-[300px] shadow-2xl">
+                <div class="w-full md:w-1/4 h-full relative bg-black">
+                    <img id="hero-img" src="" class="w-full h-full object-cover transition-opacity duration-500 opacity-100" alt="Destacado">
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent to-[#1a1a1f]/80 hidden md:block"></div>
+                </div>
+                <div class="w-full md:w-3/4 p-6 md:p-10 flex flex-col justify-center relative z-10">
+                    <span class="text-pink-600 font-bold text-xs tracking-widest uppercase mb-1" id="lbl-destacados">Destacados</span>
+                    <h2 id="hero-titulo" class="text-2xl md:text-4xl font-black text-white mb-2 leading-tight">Cargando...</h2>
+                    <p id="hero-desc" class="text-gray-300 text-sm mb-4 line-clamp-2">...</p>
+                    <div>
+                        <button onclick="irADetalle(document.getElementById('hero-titulo').innerText)" class="bg-white text-black font-bold py-2 px-6 rounded-lg hover:bg-gray-200 transition shadow-lg text-sm" id="btn-ver-vivo">Ver en Vivo</button>
+                    </div>
+                </div>
+                <div id="hero-miniaturas" class="absolute bottom-3 right-4 hidden lg:flex gap-2 z-20"></div>
+            </div>
+        </section>
+
+        <!-- TOP 10 (AUTO-SCROLL FLUIDO) -->
+        <section class="mb-10 relative">
+            <div class="flex justify-between items-end mb-4 bg-[#16121d]/60 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
+                <h2 class="text-pink-500 font-black text-xl flex items-center gap-2 uppercase tracking-widest" id="lbl-top10">🏆 Top 10 Más Vistos</h2>
+            </div>
+            <div id="top10Container" class="overflow-x-auto pt-4 pb-8 no-scrollbar w-full">
+                <div id="carrusel-top" class="flex gap-4 w-max"></div>
+            </div>
+        </section>
+
+        <!-- FILTROS Y GRID COMPACTA -->
+        <section class="mb-12">
+            <div class="flex justify-between items-center mb-4 bg-[#16121d]/60 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
+                <h2 class="text-white font-bold text-xl flex items-center gap-2" id="lbl-explorar">Explorar</h2>
+            </div>
+            
+            <div class="flex flex-wrap gap-2 mb-6">
+                <button onclick="filtrar('all')" class="filtro-btn bg-pink-600 text-white px-4 py-1.5 text-sm rounded-full font-semibold transition" data-filter="all" id="filtro-todos">Todos</button>
+                <button onclick="filtrar('f')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="f" id="filtro-mujeres">Mujeres</button>
+                <button onclick="filtrar('m')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="m" id="filtro-hombres">Hombres</button>
+                <button onclick="filtrar('c')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="c" id="filtro-parejas">Parejas</button>
+                <button onclick="filtrar('t')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="t" id="filtro-trans">Trans</button>
+            </div>
+            
+            <div id="grid-filtros" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 md:gap-3"></div>
+        </section>
+
+    </main>
+
+    <!-- VISTA 2: DETALLE -->
+    <main id="vista-detalle" class="max-w-7xl mx-auto p-4 md:p-8 hidden relative z-10">
+        <button onclick="irAInicio()" class="text-gray-400 hover:text-white mb-6 flex items-center gap-2 text-sm font-bold transition bg-[#16121d]/80 px-4 py-2 rounded-lg w-fit" id="btn-volver">
+            <i class="fas fa-arrow-left"></i> Volver al inicio
+        </button>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 flex flex-col gap-4">
+                <div class="relative w-full rounded-2xl overflow-hidden bg-black border border-gray-800 shadow-2xl" style="aspect-ratio: 16 / 9;">
+                    <div id="contenedor-video" class="absolute inset-0 flex items-center justify-center text-gray-500">Cargando video...</div>
+                </div>
+                <div class="bg-[#1a1a1f]/80 backdrop-blur-md rounded-2xl p-6 border border-gray-800 flex items-center justify-between shadow-lg">
+                    <div class="flex items-center gap-4">
+                        <img id="avatar-modelo" src="" class="w-16 h-16 rounded-full object-cover border-2 border-pink-500 bg-gray-800">
+                        <div>
+                            <h2 id="nombre-modelo" class="text-2xl font-bold">...</h2>
+                            <p id="subject-modelo" class="text-sm text-gray-400">...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-1 flex flex-col">
+                <div class="bg-[#1a1a1f]/80 backdrop-blur-md rounded-2xl border border-gray-800 flex flex-col h-[600px] shadow-2xl overflow-hidden">
+                    <div class="p-4 border-b border-gray-800 bg-[#16121d]/90"><h3 class="font-bold text-white" id="lbl-chat">💬 Chat en Vivo</h3></div>
+                    <div id="contenedor-chat" class="flex-1 relative">
+                        <div class="absolute inset-0 flex items-center justify-center text-gray-500 text-sm">Cargando chat...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const MI_WM = 'q7k3D';
+        const MODO_DESARROLLO = false; 
+
+        const textos = {
+            es: { inicio: "Inicio", categorias: "Categorías", ingresar: "Ingresar", destacados: "Destacados", verVivo: "Ver en Vivo", top10: "🏆 Top 10 Más Vistos", explorar: "Explorar", todos: "Todos", mujeres: "Mujeres", hombres: "Hombres", parejas: "Parejas", trans: "Trans", volver: "Volver al inicio", chat: "💬 Chat en Vivo" },
+            en: { inicio: "Home", categorias: "Categories", ingresar: "Log In", destacados: "Featured", verVivo: "Watch Live", top10: "🏆 Top 10 Most Viewed", explorar: "Explore", todos: "All", mujeres: "Women", hombres: "Men", parejas: "Couples", trans: "Trans", volver: "Back to home", chat: "💬 Live Chat" }
+        };
+
+        const userLang = navigator.language || navigator.userAgentLanguage;
+        const idioma = userLang.startsWith('es') ? 'es' : 'en';
+        const t = textos[idioma];
+
+        function aplicarIdioma() {
+            document.getElementById('nav-inicio').innerText = t.inicio;
+            document.getElementById('nav-categorias').innerText = t.categorias;
+            document.getElementById('btn-ingresar').innerText = t.ingresar;
+            document.getElementById('lbl-destacados').innerText = t.destacados;
+            document.getElementById('btn-ver-vivo').innerText = t.verVivo;
+            document.getElementById('lbl-top10').innerText = t.top10;
+            document.getElementById('lbl-explorar').innerText = t.explorar;
+            document.getElementById('filtro-todos').innerText = t.todos;
+            document.getElementById('filtro-mujeres').innerText = t.mujeres;
+            document.getElementById('filtro-hombres').innerText = t.hombres;
+            document.getElementById('filtro-parejas').innerText = t.parejas;
+            document.getElementById('filtro-trans').innerText = t.trans;
+            document.getElementById('btn-volver').innerHTML = `<i class="fas fa-arrow-left"></i> ${t.volver}`;
+            document.getElementById('lbl-chat').innerText = t.chat;
+        }
+
+        let modelosGlobales = [];
+        let indiceHero = 0;
+        let intervaloHero;
+        let top10Container;
+        let isTop10Hovered = false;
+
+        // Colección de fotos para el fondo (usando Unsplash para simular modelos)
+        const fotosFondo = [
+            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80',
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80',
+            'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80',
+            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',
+            'https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?w=400&q=80',
+            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80',
+            'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&q=80',
+            'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=400&q=80',
+            'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80',
+            'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&q=80',
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
+            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80'
+        ];
+
+        function generarFondoMosaico() {
+            const grid = document.getElementById('mosaicGrid');
+            let html = '';
+            // Generamos 40 imágenes para llenar la pantalla
+            for (let i = 0; i < 40; i++) {
+                const imgUrl = fotosFondo[i % fotosFondo.length];
+                html += `<img src="${imgUrl}" alt="fondo">`;
+            }
+            grid.innerHTML = html;
+        }
+
+        const datosFalsos = [
+            { username: 'Sofiia', room_subject: 'Bailando y charlando 💃', num_users: 15400, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&q=80' },
+            { username: 'Lexi', room_subject: 'Solo un poco de diversión', num_users: 12300, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80' },
+            { username: 'Valery', room_subject: 'Show privado disponible', num_users: 9800, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&q=80' },
+            { username: 'Aria', room_subject: 'Esperando por ti', num_users: 8500, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&q=80' },
+            { username: 'Kira', room_subject: 'Relajándome en casa', num_users: 7200, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?w=500&q=80' },
+            { username: 'Marcus', room_subject: 'Entrenando en vivo', num_users: 6500, gender: 'm', image_url_360x270: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&q=80' },
+            { username: 'Luna', room_subject: 'Noche de chicas', num_users: 5400, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&q=80' },
+            { username: 'Alex & Sam', room_subject: 'Pareja en vivo', num_users: 4300, gender: 'c', image_url_360x270: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=500&q=80' },
+            { username: 'Dani', room_subject: 'Trans y orgullosa', num_users: 3800, gender: 't', image_url_360x270: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&q=80' },
+            { username: 'Chloe', room_subject: 'Un café y buena charla', num_users: 3100, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&q=80' },
+            { username: 'Elena', room_subject: 'Nuevo look', num_users: 2900, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&q=80' },
+            { username: 'Max', room_subject: 'Entrenamiento', num_users: 2500, gender: 'm', image_url_360x270: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&q=80' },
+            { username: 'Sasha', room_subject: 'Hora del show', num_users: 2100, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80' },
+            { username: 'Jorge', room_subject: 'Charlando', num_users: 1800, gender: 'm', image_url_360x270: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&q=80' }
+        ];
+
+        async function cargarDatos() {
+            generarFondoMosaico(); // Generar el fondo primero
+
+            if (MODO_DESARROLLO) {
+                modelosGlobales = datosFalsos;
+                renderizarTodo();
+            } else {
+                try {
+                    const res = await fetch(`/api/proxy?wm=${MI_WM}`);
+                    const json = await res.json();
+                    modelosGlobales = json.results || [];
+                    modelosGlobales.sort((a, b) => parseInt(b.num_users) - parseInt(a.num_users));
+                    renderizarTodo();
+                } catch (error) {
+                    console.error("Error:", error);
+                }
+            }
+        }
+
+        function renderizarTodo() {
+            renderizarTop10();
+            renderizarFiltros('all');
+            configurarHero();
+            iniciarMarquesinaFluida();
+        }
+
+        function renderizarTop10() {
+            const top10 = modelosGlobales.slice(0, 10);
+            let html = '';
+            
+            top10.forEach((m, i) => {
+                const claseNeon = `text-neon-${(i % 5) + 1}`;
+                const subject = m.room_subject ? m.room_subject.replace(/<[^>]*>?/gm, '') : '';
+                html += `
+                    <div onclick="irADetalle('${m.username}')" class="relative w-72 h-44 shrink-0 group cursor-pointer">
+                        <div class="absolute inset-0 rounded-xl overflow-hidden border border-gray-800 group-hover:border-pink-500 transition-all bg-gray-900">
+                            <img src="${m.image_url_360x270}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10"></div>
+                            <div class="absolute top-2 right-2 bg-black/60 px-2 py-1 rounded-md text-xs font-bold text-green-400 flex items-center gap-1 z-20">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> ${m.num_users}
+                            </div>
+                            <div class="absolute bottom-3 left-24 right-3 z-20">
+                                <h3 class="text-white font-bold text-lg truncate">${m.username}</h3>
+                                <p class="text-gray-300 text-xs truncate">${subject}</p>
+                            </div>
+                        </div>
+                        <span class="absolute -bottom-2 left-2 text-8xl font-black ${claseNeon} z-30 pointer-events-none drop-shadow-2xl">${i + 1}</span>
+                    </div>
+                `;
+            });
+
+            document.getElementById('carrusel-top').innerHTML = html + html;
+        }
+
+        function iniciarMarquesinaFluida() {
+            top10Container = document.getElementById('top10Container');
+            if (!top10Container) return;
+            
+            const scrollSpeed = 0.7; 
+            
+            function autoScroll() {
+                if (!isTop10Hovered && !document.getElementById('vista-inicio').classList.contains('hidden')) {
+                    top10Container.scrollLeft += scrollSpeed;
+                    const maxScroll = top10Container.scrollWidth / 2;
+                    if (top10Container.scrollLeft >= maxScroll) {
+                        top10Container.scrollLeft = 0;
+                    }
+                }
+                requestAnimationFrame(autoScroll);
+            }
+            
+            requestAnimationFrame(autoScroll);
+            
+            top10Container.addEventListener('mouseenter', () => { isTop10Hovered = true; });
+            top10Container.addEventListener('mouseleave', () => { isTop10Hovered = false; });
+            top10Container.addEventListener('touchstart', () => { isTop10Hovered = true; });
+            top10Container.addEventListener('touchend', () => { 
+                setTimeout(() => { isTop10Hovered = false; }, 2000);
+            });
+        }
+
+        function configurarHero() {
+            const topHero = modelosGlobales.slice(0, 4);
+            if(topHero.length > 0) {
+                actualizarHero();
+                intervaloHero = setInterval(actualizarHero, 5000);
+            }
+        }
+
+        function actualizarHero() {
+            const topHero = modelosGlobales.slice(0, 4);
+            if(topHero.length === 0) return;
+            const modelo = topHero[indiceHero % topHero.length];
+            const img = document.getElementById('hero-img');
+            
+            img.style.opacity = 0;
+            setTimeout(() => {
+                img.src = modelo.image_url_360x270;
+                img.style.opacity = 1;
+            }, 300);
+            
+            document.getElementById('hero-titulo').innerText = modelo.username;
+            document.getElementById('hero-desc').innerText = modelo.room_subject ? modelo.room_subject.replace(/<[^>]*>?/gm, '') : '';
+            
+            document.getElementById('hero-miniaturas').innerHTML = topHero.map((m, i) => `
+                <div class="w-12 h-16 rounded-md overflow-hidden border-2 ${i === indiceHero % topHero.length ? 'border-pink-500 opacity-100' : 'border-transparent opacity-60 hover:opacity-100'} transition cursor-pointer" onclick="cambiarHero(${i})">
+                    <img src="${m.image_url_360x270}" class="w-full h-full object-cover">
+                </div>
+            `).join('');
+            indiceHero++;
+        }
+
+        function cambiarHero(index) {
+            indiceHero = index;
+            actualizarHero();
+            clearInterval(intervaloHero);
+            intervaloHero = setInterval(actualizarHero, 5000);
+        }
+
+        function renderizarFiltros(genero) {
+            document.querySelectorAll('.filtro-btn').forEach(btn => {
+                if (btn.dataset.filter === genero) {
+                    btn.className = "filtro-btn bg-pink-600 text-white px-4 py-1.5 text-sm rounded-full font-semibold transition";
+                } else {
+                    btn.className = "filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700";
+                }
+            });
+
+            let filtrados = modelosGlobales;
+            if (genero !== 'all') {
+                filtrados = modelosGlobales.filter(m => m.gender === genero);
+            }
+
+            const grid = document.getElementById('grid-filtros');
+            if (filtrados.length === 0) {
+                grid.innerHTML = '<p class="text-gray-500 col-span-full text-center">No hay modelos en esta categoría.</p>';
+                return;
+            }
+
+            grid.innerHTML = filtrados.map(m => {
+                return `
+                    <div onclick="irADetalle('${m.username}')" class="card-poster group cursor-pointer border border-gray-800 bg-gray-900 relative">
+                        <img src="${m.image_url_360x270}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#16121d] via-[#16121d]/40 to-transparent z-10"></div>
+                        
+                        <div class="absolute top-1 right-1 bg-black/70 px-1.5 py-0.5 rounded text-[10px] font-bold text-green-400 z-20 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> ${m.num_users}
+                        </div>
+
+                        <div class="absolute bottom-2 left-2 right-2 z-20">
+                            <h3 class="text-white font-bold text-xs truncate">${m.username}</h3>
+                            <p class="text-gray-400 text-[10px] truncate">${m.room_subject}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function irADetalle(username) {
+            document.getElementById('vista-inicio').classList.add('hidden');
+            document.getElementById('vista-detalle').classList.remove('hidden');
+            window.scrollTo(0, 0);
+
+            const modelo = modelosGlobales.find(m => m.username === username);
+            if (!modelo) return;
+
+            document.getElementById('nombre-modelo').innerText = modelo.username;
+            document.getElementById('subject-modelo').innerText = modelo.room_subject ? modelo.room_subject.replace(/<[^>]*>?/gm, '') : '';
+            document.getElementById('avatar-modelo').src = modelo.image_url_360x270;
+
+            if (MODO_DESARROLLO) {
+                document.getElementById('contenedor-video').innerHTML = `<div class="absolute inset-0 flex items-center justify-center bg-gray-900 text-pink-500 font-bold">[Video de ${modelo.username}]</div>`;
+                document.getElementById('contenedor-chat').innerHTML = `<div class="absolute inset-0 flex items-center justify-center bg-gray-900 text-pink-500 font-bold">[Chat de ${modelo.username}]</div>`;
+            } else {
+                const urlVideo = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&disable_sound=0`;
+                document.getElementById('contenedor-video').innerHTML = `<iframe src="${urlVideo}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
+                const urlChat = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&chat=true`;
+                document.getElementById('contenedor-chat').innerHTML = `<iframe src="${urlChat}" class="absolute inset-0 w-full h-full border-none"></iframe>`;
+            }
+        }
+
+        function irAInicio() {
+            document.getElementById('vista-detalle').classList.add('hidden');
+            document.getElementById('vista-inicio').classList.remove('hidden');
+            document.getElementById('contenedor-video').innerHTML = '';
+            document.getElementById('contenedor-chat').innerHTML = '';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            aplicarIdioma();
+            cargarDatos();
+        });
+    </script>
+</body>
+</html>
