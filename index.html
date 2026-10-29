@@ -6,62 +6,34 @@
     <title>Mi Marca - En Vivo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Librería para las banderas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
     <style>
-        /* Fondo Mosaico */
-        #bgMosaic {
-            position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none;
-            background-color: #16121d; 
-        }
-        .mosaic-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-            width: 120%; height: 120%;
-            position: absolute;
-            top: -10%; left: -10%;
-            filter: blur(4px) brightness(0.4) saturate(1.2);
-            transform: scale(1.05);
-            animation: slideMosaic 60s linear infinite alternate;
-        }
+        #bgMosaic { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; background-color: #16121d; }
+        .mosaic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; width: 120%; height: 120%; position: absolute; top: -10%; left: -10%; filter: blur(4px) brightness(0.4) saturate(1.2); transform: scale(1.05); animation: slideMosaic 60s linear infinite alternate; }
         .mosaic-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; opacity: 0.8; }
-        .mosaic-fade {
-            position: absolute; inset: 0; z-index: -1;
-            background: linear-gradient(180deg, rgba(22,18,29,0.3) 0%, rgba(22,18,29,0.8) 50%, rgba(22,18,29,1) 100%);
-        }
+        .mosaic-fade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(22,18,29,0.3) 0%, rgba(22,18,29,0.8) 50%, rgba(22,18,29,1) 100%); }
         @keyframes slideMosaic { 0% { transform: translateY(0) scale(1.05); } 100% { transform: translateY(-5%) scale(1.05); } }
-
-        /* Ocultar Scrollbars */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* Efectos Neón */
         .text-neon-1 { text-shadow: 0 0 10px #ff0044, 0 0 20px #ff0044; color: #ff0044; }
         .text-neon-2 { text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00; color: #ffcc00; }
         .text-neon-3 { text-shadow: 0 0 10px #00ff44, 0 0 20px #00ff44; color: #00ff44; }
         .text-neon-4 { text-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff; color: #00ccff; }
         .text-neon-5 { text-shadow: 0 0 10px #aa00ff, 0 0 20px #aa00ff; color: #aa00ff; }
-
-        /* Tarjetas Verticales */
-        .card-poster {
-            aspect-ratio: 2/3;
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-            transition: transform 0.3s;
-        }
+        .card-poster { aspect-ratio: 2/3; border-radius: 10px; overflow: hidden; position: relative; transition: transform 0.3s; }
         .card-poster:hover { transform: scale(1.05); z-index: 10; border-color: #ec4899; }
         #top10Container { scroll-snap-type: none; }
+        .fi { display: inline-block; width: 1.2em; height: 0.9em; background-size: contain; background-position: 50%; background-repeat: no-repeat; vertical-align: middle; border-radius: 2px; }
     </style>
 </head>
-<body class="bg-[#16121d] text-[#f4f1ff] font-sans min-h-screen relative pb-10">
+<body class="bg-[#16121d] text-[#f4f1ff] font-sans min-h-screen relative flex flex-col">
 
-    <!-- FONDO MOSAICO -->
     <div id="bgMosaic">
         <div class="mosaic-grid" id="mosaicGrid"></div>
         <div class="mosaic-fade"></div>
     </div>
 
-    <!-- HEADER -->
     <header class="border-b border-gray-800 bg-[#16121d]/80 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <h1 onclick="irAInicio()" class="text-pink-500 font-black text-2xl tracking-widest cursor-pointer hover:text-pink-400 transition">MI MARCA</h1>
@@ -73,10 +45,8 @@
         </div>
     </header>
 
-    <!-- VISTA 1: INICIO -->
-    <main id="vista-inicio" class="max-w-7xl mx-auto p-4 md:p-8 relative z-10">
+    <main id="vista-inicio" class="max-w-7xl mx-auto p-4 md:p-8 relative z-10 flex-grow">
         
-        <!-- HERO DINÁMICO -->
         <section class="mb-10">
             <div class="bg-[#1a1a1f]/60 backdrop-blur-md rounded-2xl overflow-hidden flex flex-col md:flex-row border border-gray-700/50 relative h-[300px] shadow-2xl">
                 <div class="w-full md:w-1/4 h-full relative bg-black">
@@ -95,7 +65,6 @@
             </div>
         </section>
 
-        <!-- TOP 10 -->
         <section class="mb-10 relative">
             <div class="flex justify-between items-end mb-4 bg-[#16121d]/60 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
                 <h2 class="text-pink-500 font-black text-xl flex items-center gap-2 uppercase tracking-widest" id="lbl-top10">🏆 Top 10 Más Vistos</h2>
@@ -105,18 +74,42 @@
             </div>
         </section>
 
-        <!-- FILTROS Y GRID -->
         <section class="mb-12">
             <div class="flex justify-between items-center mb-4 bg-[#16121d]/60 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
                 <h2 class="text-white font-bold text-xl flex items-center gap-2" id="lbl-explorar">Explorar</h2>
             </div>
             
-            <div class="flex flex-wrap gap-2 mb-6">
-                <button onclick="filtrar('all')" class="filtro-btn bg-pink-600 text-white px-4 py-1.5 text-sm rounded-full font-semibold transition" data-filter="all" id="filtro-todos">Todos</button>
-                <button onclick="filtrar('f')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="f" id="filtro-mujeres">Mujeres</button>
-                <button onclick="filtrar('m')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="m" id="filtro-hombres">Hombres</button>
-                <button onclick="filtrar('c')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="c" id="filtro-parejas">Parejas</button>
-                <button onclick="filtrar('t')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="t" id="filtro-trans">Trans</button>
+            <!-- Filtros: Género y País -->
+            <div class="flex flex-wrap items-center gap-4 mb-6">
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="filtrar('all')" class="filtro-btn bg-pink-600 text-white px-4 py-1.5 text-sm rounded-full font-semibold transition" data-filter="all" id="filtro-todos">Todos</button>
+                    <button onclick="filtrar('f')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="f" id="filtro-mujeres">Mujeres</button>
+                    <button onclick="filtrar('m')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="m" id="filtro-hombres">Hombres</button>
+                    <button onclick="filtrar('c')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="c" id="filtro-parejas">Parejas</button>
+                    <button onclick="filtrar('t')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="t" id="filtro-trans">Trans</button>
+                </div>
+                
+                <!-- Selector de País -->
+                <div class="flex items-center gap-2 bg-gray-800/80 rounded-full px-4 py-1 border border-gray-700">
+                    <i class="fas fa-globe text-pink-500 text-sm"></i>
+                    <select id="filtro-pais" onchange="aplicarFiltros()" class="bg-transparent text-gray-300 text-sm font-semibold outline-none cursor-pointer">
+                        <option value="">Todos los países</option>
+                        <option value="CO">🇨🇴 Colombia</option>
+                        <option value="US">🇺🇸 Estados Unidos</option>
+                        <option value="ES">🇪🇸 España</option>
+                        <option value="MX">🇲🇽 México</option>
+                        <option value="AR">🇦🇷 Argentina</option>
+                        <option value="CL">🇨🇱 Chile</option>
+                        <option value="BR">🇧🇷 Brasil</option>
+                        <option value="VE">🇻🇪 Venezuela</option>
+                        <option value="PE">🇵🇪 Perú</option>
+                        <option value="RU">🇷🇺 Rusia</option>
+                        <option value="FR">🇫🇷 Francia</option>
+                        <option value="DE">🇩🇪 Alemania</option>
+                        <option value="IT">🇮🇹 Italia</option>
+                        <option value="GB">🇬🇧 Reino Unido</option>
+                    </select>
+                </div>
             </div>
             
             <div id="grid-filtros" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 md:gap-3"></div>
@@ -124,14 +117,12 @@
 
     </main>
 
-    <!-- VISTA 2: DETALLE -->
-    <main id="vista-detalle" class="max-w-7xl mx-auto p-4 md:p-8 hidden relative z-10">
+    <main id="vista-detalle" class="max-w-7xl mx-auto p-4 md:p-8 hidden relative z-10 flex-grow">
         <button onclick="irAInicio()" class="text-gray-400 hover:text-white mb-6 flex items-center gap-2 text-sm font-bold transition bg-[#16121d]/80 px-4 py-2 rounded-lg w-fit" id="btn-volver">
             <i class="fas fa-arrow-left"></i> Volver al inicio
         </button>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Columna Izquierda: Video y Chat JUNTOS -->
             <div class="lg:col-span-2 flex flex-col gap-4">
                 <div class="relative w-full rounded-2xl overflow-hidden bg-black border border-gray-800 shadow-2xl" style="aspect-ratio: 16 / 9;">
                     <div id="contenedor-video" class="absolute inset-0 flex items-center justify-center text-gray-500">Cargando video...</div>
@@ -146,22 +137,97 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Columna Derecha: Tu diseño (NO iframe) -->
             <div class="lg:col-span-1 flex flex-col">
                 <div class="bg-[#1a1a1f]/80 backdrop-blur-md rounded-2xl border border-gray-800 flex flex-col h-[600px] shadow-2xl overflow-hidden">
                     <div class="p-4 border-b border-gray-800 bg-[#16121d]/90"><h3 class="font-bold text-white" id="lbl-chat">💬 Interacción</h3></div>
-                    <div id="contenedor-chat" class="flex-1 relative p-6 flex flex-col items-center justify-center text-center">
-                        <!-- Aquí va tu contenido propio, no el iframe duplicado -->
-                    </div>
+                    <div id="contenedor-chat" class="flex-1 relative p-6 flex flex-col items-center justify-center text-center"></div>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- FOOTER COMPLETO -->
+    <footer class="bg-[#0f0c15] border-t border-gray-800 mt-12 py-10 relative z-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-8">
+                <div>
+                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras gratuitas por edad</h4>
+                    <ul class="space-y-2 text-xs text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Cámaras de jóvenes (más de 18 años)</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras de 18 a 21 años</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras de 20 a 30 años</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras de 30 a 50 años</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras de maduras (más de 50 años)</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras gratuitas por región</h4>
+                    <ul class="space-y-2 text-xs text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Cámaras en Norteamérica</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras en otras regiones</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras en Europa y Rusia</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras en Asia</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras en Sudamérica</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Shows privados disponibles</h4>
+                    <ul class="space-y-2 text-xs text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">6 tokens por minuto</a></li>
+                        <li><a href="#" class="hover:text-white transition">12-18 tokens por minuto</a></li>
+                        <li><a href="#" class="hover:text-white transition">30-42 tokens por minuto</a></li>
+                        <li><a href="#" class="hover:text-white transition">60-72 tokens por minuto</a></li>
+                        <li><a href="#" class="hover:text-white transition">+90 tokens por minuto</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras gratuitas por estado</h4>
+                    <ul class="space-y-2 text-xs text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Shows privados</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras nuevas</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras de videojuegos</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras gratuitas</h4>
+                    <ul class="space-y-2 text-xs text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Cámaras destacadas</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras de mujeres</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras de hombres</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras de parejas</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras de trans</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-gray-500">
+                    <a href="#" class="hover:text-white transition">Seguridad y consentimiento</a>
+                    <span class="text-gray-700">|</span>
+                    <a href="#" class="hover:text-white transition">Términos y condiciones</a>
+                    <span class="text-gray-700">|</span>
+                    <a href="#" class="hover:text-white transition">Política de privacidad</a>
+                    <span class="text-gray-700">|</span>
+                    <a href="#" class="hover:text-white transition">Ayuda</a>
+                    <span class="text-gray-700">|</span>
+                    <a href="#" class="hover:text-white transition">Pautas de la comunidad</a>
+                    <span class="text-gray-700">|</span>
+                    <a href="#" class="hover:text-white transition">DMCA / Eliminar contenido</a>
+                    <span class="text-gray-700">|</span>
+                    <a href="#" class="hover:text-white transition">Opiniones</a>
+                    <span class="text-gray-700">|</span>
+                    <a href="#" class="hover:text-white transition">Centro de seguridad</a>
+                </div>
+                <div class="text-xs text-gray-600">
+                    &copy; 2026 Mi Marca. Todos los derechos reservados.
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script>
         const MI_WM = 'q7k3D';
-        const MODO_DESARROLLO = false; // Cambiado a false para producción
+        const MODO_DESARROLLO = false; 
 
         const textos = {
             es: { inicio: "Inicio", categorias: "Categorías", ingresar: "Ingresar", destacados: "Destacados", verVivo: "Ver en Vivo", top10: "🏆 Top 10 Más Vistos", explorar: "Explorar", todos: "Todos", mujeres: "Mujeres", hombres: "Hombres", parejas: "Parejas", trans: "Trans", volver: "Volver al inicio", chat: "💬 Interacción" },
@@ -194,6 +260,7 @@
         let intervaloHero;
         let top10Container;
         let isTop10Hovered = false;
+        let generoActual = 'all';
 
         const fotosFondo = [
             'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80',
@@ -236,7 +303,7 @@
 
         function renderizarTodo() {
             renderizarTop10();
-            filtrar('all'); // Carga inicial del grid
+            aplicarFiltros(); // Carga inicial del grid
             configurarHero();
             iniciarMarquesinaFluida();
         }
@@ -248,6 +315,7 @@
             top10.forEach((m, i) => {
                 const claseNeon = `text-neon-${(i % 5) + 1}`;
                 const subject = m.room_subject ? m.room_subject.replace(/<[^>]*>?/gm, '') : '';
+                const bandera = m.country ? `<span class="fi fi-${m.country.toLowerCase()}"></span>` : '';
                 html += `
                     <div onclick="irADetalle('${m.username}')" class="relative w-72 h-44 shrink-0 group cursor-pointer">
                         <div class="absolute inset-0 rounded-xl overflow-hidden border border-gray-800 group-hover:border-pink-500 transition-all bg-gray-900">
@@ -257,7 +325,7 @@
                                 <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> ${m.num_users}
                             </div>
                             <div class="absolute bottom-3 left-24 right-3 z-20">
-                                <h3 class="text-white font-bold text-lg truncate">${m.username}</h3>
+                                <h3 class="text-white font-bold text-lg truncate flex items-center gap-2">${bandera} ${m.username}</h3>
                                 <p class="text-gray-300 text-xs truncate">${subject}</p>
                             </div>
                         </div>
@@ -330,8 +398,9 @@
             intervaloHero = setInterval(actualizarHero, 5000);
         }
 
-        // FILTROS CORREGIDOS
-        async function filtrar(genero) {
+        // --- FILTROS (GÉNERO + PAÍS) ---
+        function filtrar(genero) {
+            generoActual = genero;
             document.querySelectorAll('.filtro-btn').forEach(btn => {
                 if (btn.dataset.filter === genero) {
                     btn.className = "filtro-btn bg-pink-600 text-white px-4 py-1.5 text-sm rounded-full font-semibold transition";
@@ -339,80 +408,23 @@
                     btn.className = "filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700";
                 }
             });
+            aplicarFiltros();
+        }
 
+        async function aplicarFiltros() {
+            const genero = generoActual;
+            const pais = document.getElementById('filtro-pais').value;
             const grid = document.getElementById('grid-filtros');
             grid.innerHTML = '<p class="text-gray-400 col-span-full text-center py-4">Cargando...</p>';
 
-            const genderParam = genero !== 'all' ? `&gender=${genero}` : '';
+            let queryParams = [];
+            if (genero !== 'all') queryParams.push(`gender=${genero}`);
+            if (pais) queryParams.push(`country=${pais}`);
+            
+            const queryString = queryParams.length > 0 ? '&' + queryParams.join('&') : '';
 
             try {
-                const res = await fetch(`/api/proxy?wm=${MI_WM}${genderParam}`);
+                const res = await fetch(`/api/proxy?wm=${MI_WM}${queryString}`);
                 const json = await res.json();
                 let filtrados = json.results || [];
                 filtrados.sort((a, b) => parseInt(b.num_users) - parseInt(a.num_users));
-                
-                if (filtrados.length === 0) {
-                    grid.innerHTML = '<p class="text-gray-500 col-span-full text-center py-4">No hay modelos en esta categoría ahora mismo.</p>';
-                    return;
-                }
-
-                grid.innerHTML = filtrados.map(m => {
-                    return `
-                        <div onclick="irADetalle('${m.username}')" class="card-poster group cursor-pointer border border-gray-800 bg-gray-900 relative">
-                            <img src="${m.image_url_360x270}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#16121d] via-[#16121d]/40 to-transparent z-10"></div>
-                            <div class="absolute top-1 right-1 bg-black/70 px-1.5 py-0.5 rounded text-[10px] font-bold text-green-400 z-20 flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> ${m.num_users}
-                            </div>
-                            <div class="absolute bottom-2 left-2 right-2 z-20">
-                                <h3 class="text-white font-bold text-xs truncate">${m.username}</h3>
-                                <p class="text-gray-400 text-[10px] truncate">${m.room_subject}</p>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-            } catch (error) {
-                console.error("Error al filtrar:", error);
-                grid.innerHTML = '<p class="text-red-500 col-span-full text-center py-4">Error al cargar datos.</p>';
-            }
-        }
-
-        function irADetalle(username) {
-            document.getElementById('vista-inicio').classList.add('hidden');
-            document.getElementById('vista-detalle').classList.remove('hidden');
-            window.scrollTo(0, 0);
-
-            const modelo = modelosGlobales.find(m => m.username === username);
-            if (!modelo) return;
-
-            document.getElementById('nombre-modelo').innerText = modelo.username;
-            document.getElementById('subject-modelo').innerText = modelo.room_subject ? modelo.room_subject.replace(/<[^>]*>?/gm, '') : '';
-            document.getElementById('avatar-modelo').src = modelo.image_url_360x270;
-
-            // SOLO UN IFRAME (Video + Chat juntos)
-            const urlVideo = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&disable_sound=0`;
-            document.getElementById('contenedor-video').innerHTML = `<iframe src="${urlVideo}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
-
-            // La columna derecha se llena con contenido propio
-            document.getElementById('contenedor-chat').innerHTML = `
-                <p class="text-pink-500 font-bold mb-2"><i class="fas fa-comments"></i> Chat Integrado</p>
-                <p class="text-gray-300 text-sm">El chat y las compras de tokens están dentro del reproductor de la izquierda.</p>
-                <p class="text-gray-500 text-xs mt-4">Haz clic en el reproductor para interactuar con la modelo.</p>
-            `;
-        }
-
-        function irAInicio() {
-            document.getElementById('vista-detalle').classList.add('hidden');
-            document.getElementById('vista-inicio').classList.remove('hidden');
-            document.getElementById('contenedor-video').innerHTML = '';
-            document.getElementById('contenedor-chat').innerHTML = '';
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            aplicarIdioma();
-            cargarDatos();
-        });
-    </script>
-</body>
-</html>
