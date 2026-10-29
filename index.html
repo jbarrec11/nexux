@@ -495,7 +495,7 @@
             }
         }
 
-        // === LÓGICA DE DETALLE CORREGIDA PARA CARGAR EL VIDEO ===
+        // === LÓGICA DE DETALLE CORREGIDA (VOLVEMOS A LO BÁSICO) ===
         function irADetalle(username) {
             document.getElementById('vista-inicio').classList.add('hidden');
             document.getElementById('vista-detalle').classList.remove('hidden');
@@ -512,7 +512,7 @@
             document.getElementById('avatar-modelo').src = modelo.image_url_360x270;
             document.getElementById('avatar-modelo-top').src = modelo.image_url_360x270;
 
-            // URL LIMPIA: Solo el nombre y la campaña. Sin disable_sound ni autoplay para no bloquear el iframe.
+            // URL BÁSICA QUE SÍ FUNCIONA: Solo usuario y campaña.
             const contenedorVideo = document.getElementById('contenedor-video');
             const urlVideo = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}`;
             contenedorVideo.innerHTML = `<iframe src="${urlVideo}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
