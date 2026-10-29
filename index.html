@@ -258,7 +258,6 @@
             document.getElementById('filtro-parejas').innerText = t.parejas;
             document.getElementById('filtro-trans').innerText = t.trans;
             document.getElementById('btn-volver').innerHTML = `<i class="fas fa-arrow-left"></i> ${t.volver}`;
-            // document.getElementById('lbl-chat').innerText = t.chat; // Removido porque ya no hay columna de chat
         }
 
         let modelosGlobales = [];
@@ -467,4 +466,29 @@
             document.getElementById('vista-detalle').classList.remove('hidden');
             window.scrollTo(0, 0);
 
-           
+            const modelo = modelosGlobales.find(m => m.username === username);
+            if (!modelo) return;
+
+            document.getElementById('nombre-modelo').innerText = modelo.username;
+            document.getElementById('nombre-modelo-top').innerText = modelo.username;
+            document.getElementById('subject-modelo').innerText = modelo.room_subject ? modelo.room_subject.replace(/<[^>]*>?/gm, '') : '';
+            document.getElementById('avatar-modelo').src = modelo.image_url_360x270;
+            document.getElementById('avatar-modelo-top').src = modelo.image_url_360x270;
+
+            const urlVideo = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&disable_sound=0`;
+            document.getElementById('contenedor-video').innerHTML = `<iframe src="${urlVideo}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
+        }
+
+        function irAInicio() {
+            document.getElementById('vista-detalle').classList.add('hidden');
+            document.getElementById('vista-inicio').classList.remove('hidden');
+            document.getElementById('contenedor-video').innerHTML = '';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            aplicarIdioma();
+            cargarDatos();
+        });
+    </script>
+</body>
+</html>
