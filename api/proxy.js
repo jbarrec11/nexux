@@ -1,7 +1,7 @@
 export default async function handler(request, response) {
   const { wm = 'q7k3D', gender, country, region, limit = 30, offset = 0 } = request.query;
   
-  // URL base de la API de Chaturbate (pedimos el máximo permitido: 500)
+  // Pedimos a Chaturbate el máximo permitido
   let apiUrl = `https://chaturbate.com/api/public/affiliates/onlinerooms/?format=json&wm=${wm}&limit=500&client_ip=request_ip`;
   
   if (gender && ['f', 'm', 'c', 't'].includes(gender)) {
@@ -22,46 +22,32 @@ export default async function handler(request, response) {
     let resultados = data.results || [];
 
     // --- LÓGICA DE FILTRADO ---
-    
     if (region) {
       if (region === 'asia') {
-        // Filtro especial para Asia (combinación de países y tags)
         const paisesAsia = ['PH', 'TH', 'VN', 'ID', 'MY', 'JP', 'KR', 'IN', 'CN', 'TW', 'HK'];
         const tagsAsia = ['asian', 'pinay', 'thai', 'japanese', 'korean', 'vietnamese', 'indonesian', 'filipina', 'china', 'taiwan'];
         
         resultados = resultados.filter(model => {
-          // Si el país está en la lista de Asia, lo aceptamos
           if (paisesAsia.includes(model.country)) return true;
-          
-          // Si no, revisamos si tiene algún tag asiático
           const texto = (model.room_subject || '').toLowerCase() + ' ' + (model.tags || []).join(' ').toLowerCase();
           return tagsAsia.some(tag => texto.includes(tag));
         });
-
       } else if (region === 'europa') {
         const paisesEuropa = ['ES', 'FR', 'DE', 'IT', 'GB', 'RU', 'NL', 'PT', 'SE', 'NO', 'DK', 'FI', 'PL', 'RO', 'GR', 'CZ', 'HU', 'IE', 'AT', 'CH', 'BE', 'UA'];
         resultados = resultados.filter(model => paisesEuropa.includes(model.country));
-        
       } else if (region === 'sudamerica') {
         const paisesSudamerica = ['CO', 'AR', 'CL', 'BR', 'VE', 'PE', 'EC', 'BO', 'PY', 'UY'];
         resultados = resultados.filter(model => paisesSudamerica.includes(model.country));
-        
       } else if (region === 'norteamerica') {
         const paisesNorteamerica = ['US', 'CA', 'MX'];
         resultados = resultados.filter(model => paisesNorteamerica.includes(model.country));
       }
-      
     } else if (country) {
-      // Filtro por país específico
       resultados = resultados.filter(model => model.country === country);
     }
 
-    // --- FIN DEL FILTRADO ---
-
-    // Ordenar por usuarios (los más vistos primero)
+    // Ordenar y paginar
     resultados.sort((a, b) => parseInt(b.num_users) - parseInt(a.num_users));
-
-    // Aplicar paginación
     const totalResultados = resultados.length;
     const resultadosPaginados = resultados.slice(parseInt(offset), parseInt(offset) + parseInt(limit));
 
@@ -73,7 +59,6 @@ export default async function handler(request, response) {
       count: totalResultados,
       hasMore: (parseInt(offset) + parseInt(limit)) < totalResultados
     });
-    
   } catch (error) {
     response.status(500).json({ error: 'Fallo el proxy', details: error.message });
   }
