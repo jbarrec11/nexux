@@ -25,36 +25,32 @@ export default async function handler(request, response) {
   try {
     let resultados = [];
 
-    // Si se pide una región, hacemos varias peticiones a los países principales de esa región
     if (region) {
-      const paisesPorRegion = {
-        'europa': ['ES', 'FR', 'DE', 'IT', 'GB', 'RU', 'NL', 'PT', 'SE', 'NO', 'DK', 'FI', 'PL', 'RO', 'GR', 'CZ', 'HU', 'IE', 'AT', 'CH', 'BE', 'UA'],
-        'sudamerica': ['CO', 'AR', 'CL', 'BR', 'VE', 'PE', 'EC', 'BO', 'PY', 'UY'],
-        'norteamerica': ['US', 'CA', 'MX'],
-        'asia': ['PH', 'TH', 'VN', 'ID', 'MY', 'JP', 'KR', 'IN', 'CN', 'TW', 'HK']
+      // MAPEO DE REGIONES A ETIQUETAS (TAGS) OFICIALES DE CHATURBATE
+      const tagsPorRegion = {
+        'asia': 'asian',
+        'europa': 'european', 
+        'sudamerica': 'latin',
+        'norteamerica': 'american'
       };
-
-      const paises = paisesPorRegion[region] || [];
       
-      // Hacemos una petición por cada país (o los más importantes) y juntamos los resultados
-      // Para no saturar, pedimos los primeros 5 países de la lista
-      const promesas = paises.slice(0, 5).map(pais => fetchChaturbate(`&country=${pais}`));
-      const resultadosPorPais = await Promise.all(promesas);
+      const tagBuscado = tagsPorRegion[region];
       
-      // Aplanamos el array de arrays en un solo array
-      resultados = resultadosPorPais.flat();
+      if (tagBuscado) {
+        // Usamos el parámetro 'tag' de la API
+        resultados = await fetchChaturbate(`&tag=${tagBuscado}`);
+      }
       
-      // Eliminamos duplicados (por si una modelo aparece en varias listas)
-      const unicos = new Map();
-      resultados.forEach(m => unicos.set(m.username, m));
-      resultados = Array.from(unicos.values());
-
+    } else if (country) {
+      // Si se pide un país específico, usamos el parámetro 'country'
+      resultados = await fetchChaturbate(`&country=${country}`);
     } else {
-      // Si no se pide región, hacemos la petición normal
-      let extraParams = '';
-      if (country) extraParams += `&country=${country}`;
-      resultados = await fetchChaturbate(extraParams);
+      // Sin filtros, traemos todo
+      resultados = await fetchChaturbate();
     }
+
+    // Ordenar por usuarios (opcional, pero recomendado)
+    resultados.sort((a, b) => parseInt(b.num_users) - parseInt(a.num_users));
 
     // Aplicar paginación
     const totalResultados = resultados.length;
