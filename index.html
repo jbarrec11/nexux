@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
     <style>
-        /* Fondo general */
         #bgMosaic { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; background-color: #16121d; }
         .mosaic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; width: 120%; height: 120%; position: absolute; top: -10%; left: -10%; filter: blur(4px) brightness(0.3) saturate(1.2); transform: scale(1.05); animation: slideMosaic 60s linear infinite alternate; }
         .mosaic-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; opacity: 0.8; }
@@ -18,21 +17,19 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Efectos Neón */
         .text-neon-1 { text-shadow: 0 0 10px #ff0044, 0 0 20px #ff0044; color: #ff0044; }
         .text-neon-2 { text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00; color: #ffcc00; }
         .text-neon-3 { text-shadow: 0 0 10px #00ff44, 0 0 20px #00ff44; color: #00ff44; }
         .text-neon-4 { text-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff; color: #00ccff; }
         .text-neon-5 { text-shadow: 0 0 10px #aa00ff, 0 0 20px #aa00ff; color: #aa00ff; }
         
-        /* Tarjetas */
         .card-poster { aspect-ratio: 2/3; border-radius: 10px; overflow: hidden; position: relative; transition: transform 0.3s; }
         .card-poster:hover { transform: scale(1.05); z-index: 10; border-color: #ec4899; }
         
         #top10Container { scroll-snap-type: none; }
         .fi { display: inline-block; width: 1.2em; height: 0.9em; background-size: contain; background-position: 50%; background-repeat: no-repeat; vertical-align: middle; border-radius: 2px; }
 
-        /* CORRECCIÓN: Selector de país oscuro */
+        /* Selector de país oscuro */
         select#filtro-pais {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -44,7 +41,7 @@
             cursor: pointer;
         }
         select#filtro-pais option {
-            background-color: #1f2937; /* Fondo oscuro para las opciones */
+            background-color: #1f2937;
             color: #ffffff;
             padding: 10px;
         }
@@ -117,25 +114,27 @@
                     <button onclick="filtrar('t')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="t">Trans</button>
                 </div>
                 
-                <!-- Selector de País Mejorado -->
+                <!-- Selector de Región / País -->
                 <div class="relative flex items-center gap-2 bg-gray-800/90 rounded-full px-4 py-1.5 border border-gray-600 hover:border-pink-500 transition-colors">
                     <i class="fas fa-globe text-pink-500 text-sm"></i>
-                    <select id="filtro-pais" onchange="aplicarFiltros()" class="bg-transparent text-white text-sm font-semibold w-40">
+                    <select id="filtro-pais" onchange="aplicarFiltros()" class="bg-transparent text-white text-sm font-semibold w-48">
                         <option value="">Todos los países</option>
-                        <option value="CO">🇨🇴 Colombia</option>
-                        <option value="US">🇺🇸 Estados Unidos</option>
-                        <option value="ES">🇪🇸 España</option>
-                        <option value="MX">🇲🇽 México</option>
-                        <option value="AR">🇦🇷 Argentina</option>
-                        <option value="CL">🇨🇱 Chile</option>
-                        <option value="BR">🇧🇷 Brasil</option>
-                        <option value="VE">🇻🇪 Venezuela</option>
-                        <option value="PE">🇵🇪 Perú</option>
-                        <option value="RU">🇷🇺 Rusia</option>
-                        <option value="FR">🇫🇷 Francia</option>
-                        <option value="DE">🇩🇪 Alemania</option>
-                        <option value="IT">🇮🇹 Italia</option>
-                        <option value="GB">🇬🇧 Reino Unido</option>
+                        
+                        <!-- Regiones -->
+                        <option value="region:europa">🌍 Europa</option>
+                        <option value="region:sudamerica">🌎 Sudamérica</option>
+                        <option value="region:norteamerica">🌎 Norteamérica</option>
+                        <option value="region:asia">🌏 Asia</option>
+                        
+                        <!-- Países Específicos -->
+                        <option value="country:CO">🇨🇴 Colombia</option>
+                        <option value="country:ES">🇪🇸 España</option>
+                        <option value="country:US">🇺🇸 Estados Unidos</option>
+                        <option value="country:MX">🇲🇽 México</option>
+                        <option value="country:AR">🇦🇷 Argentina</option>
+                        <option value="country:CL">🇨🇱 Chile</option>
+                        <option value="country:BR">🇧🇷 Brasil</option>
+                        <option value="country:PE">🇵🇪 Perú</option>
                     </select>
                     <i class="fas fa-chevron-down text-gray-400 text-xs pointer-events-none absolute right-3"></i>
                 </div>
@@ -181,26 +180,26 @@
         </div>
     </main>
 
-    <!-- FOOTER COMPLETO Y FUNCIONAL (CON FONDO SÓLIDO) -->
+    <!-- FOOTER FUNCIONAL -->
     <footer class="bg-[#0b0910] border-t border-gray-800 mt-12 py-10 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-8">
                 <div>
                     <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras por edad</h4>
                     <ul class="space-y-2 text-sm text-gray-300">
-                        <li><a href="#" onclick="filtrarPorTag('18-21'); return false;" class="hover:text-pink-400 transition">Cámaras de 18 a 21 años</a></li>
-                        <li><a href="#" onclick="filtrarPorTag('20-30'); return false;" class="hover:text-pink-400 transition">Cámaras de 20 a 30 años</a></li>
-                        <li><a href="#" onclick="filtrarPorTag('30-50'); return false;" class="hover:text-pink-400 transition">Cámaras de 30 a 50 años</a></li>
-                        <li><a href="#" onclick="filtrarPorTag('mature'); return false;" class="hover:text-pink-400 transition">Cámaras de maduras (+50)</a></li>
+                        <li><a href="#" onclick="filtrar('f'); return false;" class="hover:text-pink-400 transition">Cámaras de mujeres</a></li>
+                        <li><a href="#" onclick="filtrar('m'); return false;" class="hover:text-pink-400 transition">Cámaras de hombres</a></li>
+                        <li><a href="#" onclick="filtrar('c'); return false;" class="hover:text-pink-400 transition">Cámaras de parejas</a></li>
+                        <li><a href="#" onclick="filtrar('t'); return false;" class="hover:text-pink-400 transition">Cámaras de trans</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras por región</h4>
                     <ul class="space-y-2 text-sm text-gray-300">
-                        <li><a href="#" onclick="filtrarPorPais('US'); return false;" class="hover:text-pink-400 transition">Cámaras en Norteamérica</a></li>
-                        <li><a href="#" onclick="filtrarPorPais('ES'); return false;" class="hover:text-pink-400 transition">Cámaras en Europa</a></li>
-                        <li><a href="#" onclick="filtrarPorPais('RU'); return false;" class="hover:text-pink-400 transition">Cámaras en Rusia</a></li>
-                        <li><a href="#" onclick="filtrarPorPais('CO'); return false;" class="hover:text-pink-400 transition">Cámaras en Sudamérica</a></li>
+                        <li><a href="#" onclick="filtrarPorRegion('norteamerica'); return false;" class="hover:text-pink-400 transition">Cámaras en Norteamérica</a></li>
+                        <li><a href="#" onclick="filtrarPorRegion('europa'); return false;" class="hover:text-pink-400 transition">Cámaras en Europa</a></li>
+                        <li><a href="#" onclick="filtrarPorRegion('sudamerica'); return false;" class="hover:text-pink-400 transition">Cámaras en Sudamérica</a></li>
+                        <li><a href="#" onclick="filtrarPorRegion('asia'); return false;" class="hover:text-pink-400 transition">Cámaras en Asia</a></li>
                     </ul>
                 </div>
                 <div>
@@ -221,12 +220,11 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras gratis</h4>
+                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Destacadas</h4>
                     <ul class="space-y-2 text-sm text-gray-300">
-                        <li><a href="#" onclick="filtrar('f'); return false;" class="hover:text-pink-400 transition">Cámaras de mujeres</a></li>
-                        <li><a href="#" onclick="filtrar('m'); return false;" class="hover:text-pink-400 transition">Cámaras de hombres</a></li>
-                        <li><a href="#" onclick="filtrar('c'); return false;" class="hover:text-pink-400 transition">Cámaras de parejas</a></li>
-                        <li><a href="#" onclick="filtrar('t'); return false;" class="hover:text-pink-400 transition">Cámaras de trans</a></li>
+                        <li><a href="#" onclick="irAInicio(); return false;" class="hover:text-pink-400 transition">Inicio</a></li>
+                        <li><a href="#" class="hover:text-pink-400 transition">Cámaras destacadas</a></li>
+                        <li><a href="#" class="hover:text-pink-400 transition">Cámaras nuevas</a></li>
                     </ul>
                 </div>
             </div>
@@ -242,8 +240,6 @@
                     <a href="#" class="hover:text-white transition">Ayuda</a>
                     <span class="text-gray-700">|</span>
                     <a href="#" class="hover:text-white transition">Pautas de la comunidad</a>
-                    <span class="text-gray-700">|</span>
-                    <a href="#" class="hover:text-white transition">DMCA</a>
                 </div>
                 <div class="text-xs text-gray-500">
                     &copy; 2026 Mi Marca. Todos los derechos reservados.
@@ -404,27 +400,30 @@
             aplicarFiltros();
         }
 
-        function filtrarPorPais(codigoPais) {
-            document.getElementById('filtro-pais').value = codigoPais;
+        function filtrarPorRegion(region) {
+            document.getElementById('filtro-pais').value = `region:${region}`;
             aplicarFiltros();
-            // Hacer scroll hacia el grid para ver los resultados
             document.getElementById('grid-filtros').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
-        function filtrarPorTag(tag) {
-            // Para simular el filtro de edad, recargamos mostrando un alert (o podrías implementarlo en el proxy)
-            alert("Filtro por etiqueta: " + tag + "\n(Esta función requiere agregar el parámetro 'tag' a tu proxy de Vercel)");
         }
 
         async function aplicarFiltros() {
             const genero = generoActual;
-            const pais = document.getElementById('filtro-pais').value;
+            const filtroSeleccionado = document.getElementById('filtro-pais').value;
             const grid = document.getElementById('grid-filtros');
             grid.innerHTML = '<p class="text-gray-400 col-span-full text-center py-4"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
 
             let queryParams = [];
             if (genero !== 'all') queryParams.push(`gender=${genero}`);
-            if (pais) queryParams.push(`country=${pais}`);
+            
+            // Lógica para enviar el parámetro correcto (region o country)
+            if (filtroSeleccionado) {
+                const [tipo, valor] = filtroSeleccionado.split(':'); 
+                if (tipo === 'region') {
+                    queryParams.push(`region=${valor}`);
+                } else if (tipo === 'country') {
+                    queryParams.push(`country=${valor}`);
+                }
+            }
             
             const queryString = queryParams.length > 0 ? '&' + queryParams.join('&') : '';
 
