@@ -1,9 +1,9 @@
 export default async function handler(request, response) {
-  const { wm = 'q7k3D', gender } = request.query;
+  const { wm = 'q7k3D', gender, country } = request.query;
   
-  let apiUrl = `https://chaturbate.com/api/public/affiliates/onlinerooms/?format=json&wm=${wm}&limit=100&client_ip=request_ip`;
+  // Construimos la URL base (sin filtro de país, porque la API no lo soporta directamente)
+  let apiUrl = `https://chaturbate.com/api/public/affiliates/onlinerooms/?format=json&wm=${wm}&limit=500&client_ip=request_ip`;
   
-  // Si el frontend envía un género válido, lo añadimos a la URL
   if (gender && ['f', 'm', 'c', 't'].includes(gender)) {
     apiUrl += `&gender=${gender}`;
   }
@@ -18,7 +18,14 @@ export default async function handler(request, response) {
 
     if (!res.ok) throw new Error(`Chaturbate status: ${res.status}`);
     
-    const data = await res.json();
+    let data = await res.json();
+    
+    // FILTRO POR PAÍS EN EL SERVIDOR
+    // Si se solicita un país, filtramos el array de resultados antes de enviarlo
+    if (country && data.results) {
+      data.results = data.results.filter(model => model.country === country);
+      data.count = data.results.length;
+    }
     
     response.setHeader('Access-Control-Allow-Origin', '*');
     response.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate'); 
