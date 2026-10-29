@@ -3,68 +3,552 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS CAM - Prueba de Iframe</title>
+    <title>NEXUS CAM - El Portal del Placer en Vivo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
     <style>
-        body { background-color: #0B0910; color: white; font-family: sans-serif; }
-        #bgMosaic { position: fixed; inset: 0; z-index: -2; background-color: #0B0910; }
+        /* Fondo general más oscuro y premium */
+        #bgMosaic { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; background-color: #0B0910; }
+        .mosaic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; width: 120%; height: 120%; position: absolute; top: -10%; left: -10%; filter: blur(5px) brightness(0.2) saturate(1.5); transform: scale(1.05); animation: slideMosaic 60s linear infinite alternate; }
+        .mosaic-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; opacity: 0.6; }
+        .mosaic-fade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(11,9,16,0.6) 0%, rgba(11,9,16,0.9) 50%, rgba(11,9,16,1) 100%); }
+        @keyframes slideMosaic { 0% { transform: translateY(0) scale(1.05); } 100% { transform: translateY(-5%) scale(1.05); } }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Efectos Neón para el Top 10 */
+        .text-neon-1 { text-shadow: 0 0 10px #FF0055, 0 0 20px #FF0055; color: #FF0055; }
+        .text-neon-2 { text-shadow: 0 0 10px #FFCC00, 0 0 20px #FFCC00; color: #FFCC00; }
+        .text-neon-3 { text-shadow: 0 0 10px #00FF44, 0 0 20px #00FF44; color: #00FF44; }
+        .text-neon-4 { text-shadow: 0 0 10px #00CCFF, 0 0 20px #00CCFF; color: #00CCFF; }
+        .text-neon-5 { text-shadow: 0 0 10px #9D00FF, 0 0 20px #9D00FF; color: #9D00FF; }
+        
+        .card-poster { aspect-ratio: 2/3; border-radius: 10px; overflow: hidden; position: relative; transition: transform 0.3s; }
+        .card-poster:hover { transform: scale(1.05); z-index: 10; border-color: #FF0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.5); }
+        
+        #top10Container { scroll-snap-type: none; }
+        .fi { display: inline-block; width: 1.2em; height: 0.9em; background-size: contain; background-position: 50%; background-repeat: no-repeat; vertical-align: middle; border-radius: 2px; }
+
+        /* Selector de país oscuro */
+        select#filtro-pais { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-color: transparent; color: #f4f1ff; border: none; outline: none; cursor: pointer; }
+        select#filtro-pais option { background-color: #1f2937; color: #ffffff; padding: 10px; }
+
+        /* Estilo del Logo de Texto Neón */
+        .logo-neon {
+            font-family: 'Arial Black', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #FF0055, #9D00FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="bg-[#0B0910] text-[#f4f1ff] font-sans min-h-screen relative flex flex-col">
 
-    <header class="border-b border-gray-800 p-4 flex justify-between items-center bg-[#0B0910] z-50">
-        <h1 onclick="irAInicio()" class="text-pink-500 font-black text-2xl cursor-pointer">NEXUS CAM</h1>
-        <button onclick="irADetalle()" class="bg-pink-600 px-4 py-2 rounded text-white font-bold">Probar Sala Fija</button>
+    <!-- FONDO MOSAICO -->
+    <div id="bgMosaic">
+        <div class="mosaic-grid" id="mosaicGrid"></div>
+        <div class="mosaic-fade"></div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="border-b border-gray-800/50 bg-[#0B0910]/80 backdrop-blur-xl sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+            <!-- LOGO NEXUS CAM -->
+            <h1 onclick="irAInicio()" class="logo-neon text-3xl cursor-pointer hover:scale-105 transition-transform">
+                NEXUS<span class="text-white text-opacity-80">CAM</span>
+            </h1>
+            <nav class="hidden md:flex gap-8 text-sm font-bold tracking-wider text-gray-400">
+                <a href="#" onclick="irAInicio()" class="hover:text-[#FF0055] transition-colors">INICIO</a>
+                <a href="#" class="hover:text-[#FF0055] transition-colors">CATEGORÍAS</a>
+                <a href="#" class="hover:text-[#FF0055] transition-colors">TOP MODELOS</a>
+            </nav>
+            <button class="bg-gradient-to-r from-[#FF0055] to-[#9D00FF] hover:from-[#FF0055] hover:to-[#FF0055] text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-[0_0_15px_rgba(255,0,85,0.4)]">
+                INGRESAR
+            </button>
+        </div>
     </header>
 
-    <main id="vista-inicio" class="max-w-7xl mx-auto p-8 flex-grow w-full">
-        <h2 class="text-2xl font-bold mb-4">Haz clic en "Probar Sala Fija" arriba para ver si el iframe carga.</h2>
-        <p class="text-gray-400">Si la sala carga, el problema es la generación dinámica de la URL. Si no carga, Chaturbate está bloqueando tu dominio de Vercel.</p>
+    <!-- VISTA 1: INICIO -->
+    <main id="vista-inicio" class="max-w-7xl mx-auto p-4 md:p-8 relative z-10 flex-grow w-full">
+        
+        <!-- HERO -->
+        <section class="mb-12">
+            <div class="bg-[#16121d]/80 backdrop-blur-xl rounded-3xl overflow-hidden flex flex-col md:flex-row border border-gray-700/50 relative h-[350px] shadow-2xl">
+                <div class="w-full md:w-1/4 h-full relative bg-black">
+                    <img id="hero-img" src="" class="w-full h-full object-cover transition-opacity duration-500 opacity-100" alt="Destacado">
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent to-[#16121d] hidden md:block"></div>
+                </div>
+                <div class="w-full md:w-3/4 p-8 md:p-12 flex flex-col justify-center relative z-10">
+                    <span class="text-[#FF0055] font-black text-xs tracking-widest uppercase mb-2 flex items-center gap-2">
+                        <i class="fas fa-star"></i> DESTACADO DE LA SEMANA
+                    </span>
+                    <h2 id="hero-titulo" class="text-3xl md:text-5xl font-black text-white mb-4 leading-tight">Cargando...</h2>
+                    <p id="hero-desc" class="text-gray-400 text-sm md:text-base mb-8 line-clamp-2 max-w-2xl">...</p>
+                    <div>
+                        <button onclick="irADetalle(document.getElementById('hero-titulo').innerText)" class="bg-white text-black font-black py-3 px-8 rounded-full hover:bg-gray-200 transition shadow-[0_0_20px_rgba(255,255,255,0.3)] text-sm flex items-center gap-2">
+                            <i class="fas fa-play"></i> VER AHORA
+                        </button>
+                    </div>
+                </div>
+                <div id="hero-miniaturas" class="absolute bottom-6 right-6 hidden lg:flex gap-3 z-20"></div>
+            </div>
+        </section>
+
+        <!-- TOP 10 -->
+        <section class="mb-12 relative">
+            <div class="flex justify-between items-end mb-6 bg-[#16121d]/60 backdrop-blur-md p-4 rounded-2xl border border-gray-800/50">
+                <h2 class="text-[#FF0055] font-black text-2xl flex items-center gap-3 uppercase tracking-widest">
+                    <i class="fas fa-crown text-yellow-400"></i> Top 10 Más Vistos
+                </h2>
+            </div>
+            <div id="top10Container" class="overflow-x-auto pt-4 pb-8 no-scrollbar w-full">
+                <div id="carrusel-top" class="flex gap-6 w-max"></div>
+            </div>
+        </section>
+
+        <!-- FILTROS Y GRID -->
+        <section class="mb-12">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 bg-[#16121d]/60 backdrop-blur-md p-4 rounded-2xl border border-gray-800/50 gap-4">
+                <h2 class="text-white font-black text-2xl flex items-center gap-2">EXPLORAR</h2>
+                
+                <div class="flex flex-wrap items-center gap-3">
+                    <!-- Botones de Género -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filtrar('all')" class="filtro-btn bg-[#FF0055] text-white px-5 py-2 text-xs font-bold rounded-full transition shadow-[0_0_10px_rgba(255,0,85,0.4)]" data-filter="all">TODOS</button>
+                        <button onclick="filtrar('f')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-5 py-2 text-xs font-bold rounded-full transition border border-gray-700" data-filter="f">MUJERES</button>
+                        <button onclick="filtrar('m')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-5 py-2 text-xs font-bold rounded-full transition border border-gray-700" data-filter="m">HOMBRES</button>
+                        <button onclick="filtrar('c')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-5 py-2 text-xs font-bold rounded-full transition border border-gray-700" data-filter="c">PAREJAS</button>
+                        <button onclick="filtrar('t')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-5 py-2 text-xs font-bold rounded-full transition border border-gray-700" data-filter="t">TRANS</button>
+                    </div>
+                    
+                    <!-- Selector de País -->
+                    <div class="relative flex items-center gap-2 bg-gray-800/90 rounded-full px-4 py-2 border border-gray-600 hover:border-[#FF0055] transition-colors">
+                        <i class="fas fa-globe text-[#FF0055] text-sm"></i>
+                        <select id="filtro-pais" onchange="aplicarFiltros()" class="bg-transparent text-white text-xs font-bold w-40 outline-none">
+                            <option value="">TODOS LOS PAÍSES</option>
+                            <option value="region:europa">🌍 EUROPA</option>
+                            <option value="region:sudamerica">🌎 SUDAMÉRICA</option>
+                            <option value="region:norteamerica">🌎 NORTEAMÉRICA</option>
+                            <option value="region:asia">🌏 ASIA</option>
+                            <option value="country:CO">🇨🇴 COLOMBIA</option>
+                            <option value="country:ES">🇪🇸 ESPAÑA</option>
+                            <option value="country:US">🇺🇸 ESTADOS UNIDOS</option>
+                            <option value="country:MX">🇲🇽 MÉXICO</option>
+                            <option value="country:AR">🇦🇷 ARGENTINA</option>
+                        </select>
+                        <i class="fas fa-chevron-down text-gray-400 text-xs pointer-events-none absolute right-3"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="grid-filtros" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4"></div>
+            
+            <div id="contenedor-cargar-mas" class="w-full flex justify-center mt-8 hidden">
+                <button onclick="cargarMas()" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-full transition border border-gray-600 hover:border-[#FF0055]">
+                    <i class="fas fa-plus-circle mr-2 text-[#FF0055]"></i> CARGAR MÁS
+                </button>
+            </div>
+        </section>
     </main>
 
+    <!-- VISTA 2: DETALLE -->
     <main id="vista-detalle" class="max-w-7xl mx-auto p-4 md:p-8 hidden relative z-10 flex-grow w-full">
-        <button onclick="irAInicio()" class="text-gray-400 hover:text-white mb-6 flex items-center gap-2 text-sm font-bold bg-[#16121d] px-4 py-2 rounded border border-gray-700">
-            <i class="fas fa-arrow-left"></i> VOLVER
-        </button>
+        <div class="flex justify-between items-center mb-6">
+            <button onclick="irAInicio()" class="text-gray-400 hover:text-white flex items-center gap-2 text-sm font-bold transition bg-[#16121d]/90 px-5 py-2.5 rounded-full border border-gray-700 hover:border-[#FF0055]">
+                <i class="fas fa-arrow-left"></i> VOLVER
+            </button>
+            <div class="flex items-center gap-4">
+                <img id="avatar-modelo-top" src="" class="w-12 h-12 rounded-full object-cover border-2 border-[#FF0055] bg-gray-800 hidden md:block">
+                <h2 id="nombre-modelo-top" class="text-xl font-black text-white hidden md:block tracking-wider">...</h2>
+            </div>
+        </div>
 
         <div class="relative w-full rounded-3xl overflow-hidden bg-black border border-gray-800 shadow-2xl" style="aspect-ratio: 16 / 9;">
             <div id="contenedor-video" class="absolute inset-0 flex items-center justify-center text-gray-500">
                 <div class="text-center">
                     <i class="fas fa-spinner fa-spin text-4xl mb-4 text-[#FF0055]"></i>
-                    <p class="font-bold tracking-widest">CARGANDO SALA FIJA...</p>
+                    <p class="font-bold tracking-widest">CARGANDO SALA...</p>
                 </div>
+            </div>
+        </div>
+        
+        <div class="bg-[#16121d]/90 backdrop-blur-xl rounded-3xl p-6 border border-gray-800 mt-6 flex flex-col md:flex-row items-start md:items-center justify-between shadow-2xl gap-6">
+            <div class="flex items-center gap-6">
+                <img id="avatar-modelo" src="" class="w-20 h-20 rounded-full object-cover border-4 border-[#FF0055] bg-gray-800 shadow-[0_0_15px_rgba(255,0,85,0.5)]">
+                <div>
+                    <h2 id="nombre-modelo" class="text-3xl font-black text-white tracking-wide">...</h2>
+                    <p id="subject-modelo" class="text-gray-400 text-sm mt-1">...</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="abrirPerfilReal()" class="bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 px-6 py-3 rounded-full text-sm font-bold transition flex items-center gap-2">
+                    <i class="fas fa-user-circle text-[#FF0055] text-lg"></i> VER PERFIL
+                </button>
+                <span class="bg-[#FF0055]/20 text-[#FF0055] text-xs font-bold px-4 py-2 rounded-full border border-[#FF0055]/50 hidden md:inline">EN VIVO</span>
+                <span class="bg-gradient-to-r from-[#FF0055] to-[#9D00FF] text-white text-xs font-bold px-4 py-2 rounded-full hidden md:inline shadow-[0_0_10px_rgba(255,0,85,0.4)]">TOP MODEL</span>
             </div>
         </div>
     </main>
 
+    <!-- FOOTER -->
+    <footer class="bg-[#0B0910] border-t border-gray-800/50 mt-16 py-12 relative z-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+                <div>
+                    <h4 class="text-[#FF0055] font-black text-xs mb-5 uppercase tracking-widest">Cámaras por edad</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="#" onclick="irAInicioParaFiltrar('f'); return false;" class="hover:text-white transition">Cámaras de mujeres</a></li>
+                        <li><a href="#" onclick="irAInicioParaFiltrar('m'); return false;" class="hover:text-white transition">Cámaras de hombres</a></li>
+                        <li><a href="#" onclick="irAInicioParaFiltrar('c'); return false;" class="hover:text-white transition">Cámaras de parejas</a></li>
+                        <li><a href="#" onclick="irAInicioParaFiltrar('t'); return false;" class="hover:text-white transition">Cámaras de trans</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[#FF0055] font-black text-xs mb-5 uppercase tracking-widest">Cámaras por región</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="#" onclick="irAInicioParaRegion('norteamerica'); return false;" class="hover:text-white transition">Norteamérica</a></li>
+                        <li><a href="#" onclick="irAInicioParaRegion('europa'); return false;" class="hover:text-white transition">Europa</a></li>
+                        <li><a href="#" onclick="irAInicioParaRegion('sudamerica'); return false;" class="hover:text-white transition">Sudamérica</a></li>
+                        <li><a href="#" onclick="irAInicioParaRegion('asia'); return false;" class="hover:text-white transition">Asia</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[#FF0055] font-black text-xs mb-5 uppercase tracking-widest">Shows privados</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="#" class="hover:text-white transition">6 tokens / min</a></li>
+                        <li><a href="#" class="hover:text-white transition">12-18 tokens / min</a></li>
+                        <li><a href="#" class="hover:text-white transition">30-42 tokens / min</a></li>
+                        <li><a href="#" class="hover:text-white transition">+90 tokens / min</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[#FF0055] font-black text-xs mb-5 uppercase tracking-widest">Por estado</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="#" class="hover:text-white transition">Shows privados</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras nuevas</a></li>
+                        <li><a href="#" class="hover:text-white transition">Videojuegos</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[#FF0055] font-black text-xs mb-5 uppercase tracking-widest">Destacadas</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="#" onclick="irAInicio(); return false;" class="hover:text-white transition">Inicio</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras destacadas</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras nuevas</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800/50 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <a href="#" class="hover:text-white transition">Seguridad</a>
+                    <a href="#" class="hover:text-white transition">Términos</a>
+                    <a href="#" class="hover:text-white transition">Privacidad</a>
+                    <a href="#" class="hover:text-white transition">Ayuda</a>
+                    <a href="#" class="hover:text-white transition">DMCA</a>
+                </div>
+                <div class="text-xs text-gray-600 font-medium">
+                    &copy; 2026 NEXUS CAM. Todos los derechos reservados.
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script>
         const MI_WM = 'q7k3D';
-        // NOMBRE FIJO PARA LA PRUEBA
-        const MODELO_FIJA = 'sabrina_geek'; 
+        
+        let modelosGlobales = []; 
+        let indiceHero = 0;
+        let intervaloHero;
+        let top10Container;
+        let isTop10Hovered = false;
+        let generoActual = 'all';
+        
+        let paginaActual = 0;
+        const limitePorPagina = 30;
+        let hayMasResultados = true;
+        
+        let usuarioActualDetalle = "";
 
-        function irADetalle() {
+        const fotosFondo = [
+            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80',
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80',
+            'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80',
+            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',
+            'https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?w=400&q=80',
+            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80'
+        ];
+
+        function generarFondoMosaico() {
+            const grid = document.getElementById('mosaicGrid');
+            let html = '';
+            for (let i = 0; i < 40; i++) {
+                const imgUrl = fotosFondo[i % fotosFondo.length];
+                html += `<img src="${imgUrl}" alt="fondo">`;
+            }
+            grid.innerHTML = html;
+        }
+
+        async function cargarDatos() {
+            generarFondoMosaico();
+            try {
+                const res = await fetch(`/api/proxy?wm=${MI_WM}&limit=50`);
+                const json = await res.json();
+                modelosGlobales = json.results || [];
+                modelosGlobales.sort((a, b) => parseInt(b.num_users) - parseInt(a.num_users));
+                
+                renderizarTop10();
+                configurarHero();
+                iniciarMarquesinaFluida();
+                aplicarFiltros(); 
+            } catch (error) {
+                console.error("Error al cargar datos:", error);
+                document.getElementById('grid-filtros').innerHTML = '<p class="text-red-500 col-span-full text-center">Error de conexión. Revisa Vercel.</p>';
+            }
+        }
+
+        function renderizarTop10() {
+            const top10 = modelosGlobales.slice(0, 10);
+            let html = '';
+            
+            top10.forEach((m, i) => {
+                const claseNeon = `text-neon-${(i % 5) + 1}`;
+                const subject = m.room_subject ? m.room_subject.replace(/<[^>]*>?/gm, '') : '';
+                const bandera = m.country ? `<span class="fi fi-${m.country.toLowerCase()}"></span>` : '';
+                html += `
+                    <div onclick="irADetalle('${m.username}')" class="relative w-72 h-44 shrink-0 group cursor-pointer">
+                        <div class="absolute inset-0 rounded-2xl overflow-hidden border border-gray-800 group-hover:border-[#FF0055] transition-all bg-gray-900">
+                            <img src="${m.image_url_360x270}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10"></div>
+                            <div class="absolute top-3 right-3 bg-black/70 px-2.5 py-1 rounded-md text-xs font-bold text-green-400 flex items-center gap-1.5 z-20 backdrop-blur-sm">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> ${m.num_users}
+                            </div>
+                            <div class="absolute bottom-4 left-28 right-4 z-20">
+                                <h3 class="text-white font-black text-lg truncate flex items-center gap-2">${bandera} ${m.username}</h3>
+                                <p class="text-gray-400 text-xs truncate mt-1">${subject}</p>
+                            </div>
+                        </div>
+                        <span class="absolute -bottom-4 left-2 text-8xl font-black ${claseNeon} z-30 pointer-events-none drop-shadow-2xl opacity-80">${i + 1}</span>
+                    </div>
+                `;
+            });
+            document.getElementById('carrusel-top').innerHTML = html + html;
+        }
+
+        function iniciarMarquesinaFluida() {
+            top10Container = document.getElementById('top10Container');
+            if (!top10Container) return;
+            const scrollSpeed = 0.7; 
+            
+            function autoScroll() {
+                if (!isTop10Hovered && !document.getElementById('vista-inicio').classList.contains('hidden')) {
+                    top10Container.scrollLeft += scrollSpeed;
+                    const maxScroll = top10Container.scrollWidth / 2;
+                    if (top10Container.scrollLeft >= maxScroll) top10Container.scrollLeft = 0;
+                }
+                requestAnimationFrame(autoScroll);
+            }
+            requestAnimationFrame(autoScroll);
+            
+            top10Container.addEventListener('mouseenter', () => { isTop10Hovered = true; });
+            top10Container.addEventListener('mouseleave', () => { isTop10Hovered = false; });
+            top10Container.addEventListener('touchstart', () => { isTop10Hovered = true; });
+            top10Container.addEventListener('touchend', () => { setTimeout(() => { isTop10Hovered = false; }, 2000); });
+        }
+
+        function configurarHero() {
+            const topHero = modelosGlobales.slice(0, 4);
+            if(topHero.length > 0) {
+                actualizarHero();
+                intervaloHero = setInterval(actualizarHero, 5000);
+            }
+        }
+
+        function actualizarHero() {
+            const topHero = modelosGlobales.slice(0, 4);
+            if(topHero.length === 0) return;
+            const modelo = topHero[indiceHero % topHero.length];
+            const img = document.getElementById('hero-img');
+            
+            img.style.opacity = 0;
+            setTimeout(() => {
+                img.src = modelo.image_url_360x270;
+                img.style.opacity = 1;
+            }, 300);
+            
+            document.getElementById('hero-titulo').innerText = modelo.username;
+            document.getElementById('hero-desc').innerText = modelo.room_subject ? modelo.room_subject.replace(/<[^>]*>?/gm, '') : '';
+            
+            document.getElementById('hero-miniaturas').innerHTML = topHero.map((m, i) => `
+                <div class="w-14 h-20 rounded-lg overflow-hidden border-2 ${i === indiceHero % topHero.length ? 'border-[#FF0055] opacity-100' : 'border-transparent opacity-50 hover:opacity-100'} transition cursor-pointer" onclick="cambiarHero(${i})">
+                    <img src="${m.image_url_360x270}" class="w-full h-full object-cover">
+                </div>
+            `).join('');
+            indiceHero++;
+        }
+
+        function cambiarHero(index) {
+            indiceHero = index;
+            actualizarHero();
+            clearInterval(intervaloHero);
+            intervaloHero = setInterval(actualizarHero, 5000);
+        }
+
+        function filtrar(genero) {
+            generoActual = genero;
+            document.querySelectorAll('.filtro-btn').forEach(btn => {
+                if (btn.dataset.filter === genero) {
+                    btn.className = "filtro-btn bg-[#FF0055] text-white px-5 py-2 text-xs font-bold rounded-full transition shadow-[0_0_10px_rgba(255,0,85,0.4)]";
+                } else {
+                    btn.className = "filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-5 py-2 text-xs font-bold rounded-full transition border border-gray-700";
+                }
+            });
+            aplicarFiltros();
+        }
+
+        function irAInicioParaFiltrar(genero) {
+            irAInicio(); 
+            filtrar(genero); 
+            document.getElementById('grid-filtros').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function irAInicioParaRegion(region) {
+            irAInicio(); 
+            document.getElementById('filtro-pais').value = `region:${region}`;
+            aplicarFiltros();
+            document.getElementById('grid-filtros').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        async function aplicarFiltros() {
+            paginaActual = 0;
+            document.getElementById('grid-filtros').innerHTML = ''; 
+            await cargarPagina();
+        }
+
+        async function cargarMas() {
+            paginaActual++;
+            await cargarPagina();
+        }
+
+        async function cargarPagina() {
+            const grid = document.getElementById('grid-filtros');
+            const btnMas = document.getElementById('contenedor-cargar-mas');
+            
+            if (paginaActual === 0) {
+                grid.innerHTML = '<p class="text-gray-400 col-span-full text-center py-4"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
+            } else {
+                btnMas.innerHTML = '<button class="bg-gray-800 text-white font-bold py-2 px-6 rounded-full"><i class="fas fa-spinner fa-spin mr-2"></i> Cargando...</button>';
+            }
+
+            const genero = generoActual;
+            const filtroSeleccionado = document.getElementById('filtro-pais').value;
+            const offset = paginaActual * limitePorPagina;
+
+            let queryParams = [`limit=${limitePorPagina}`, `offset=${offset}`];
+            if (genero !== 'all') queryParams.push(`gender=${genero}`);
+            
+            if (filtroSeleccionado) {
+                const [tipo, valor] = filtroSeleccionado.split(':'); 
+                if (tipo === 'region') queryParams.push(`region=${valor}`);
+                else if (tipo === 'country') queryParams.push(`country=${valor}`);
+            }
+            
+            const queryString = '&' + queryParams.join('&');
+
+            try {
+                const res = await fetch(`/api/proxy?wm=${MI_WM}${queryString}`);
+                const json = await res.json();
+                let filtrados = json.results || [];
+                
+                hayMasResultados = json.hasMore;
+
+                if (paginaActual === 0) grid.innerHTML = ''; 
+
+                if (filtrados.length === 0 && paginaActual === 0) {
+                    grid.innerHTML = '<p class="text-gray-500 col-span-full text-center py-4">No hay modelos en esta categoría ahora mismo.</p>';
+                    btnMas.classList.add('hidden');
+                    return;
+                }
+
+                const htmlNuevasTarjetas = filtrados.map(m => {
+                    const bandera = m.country ? `<span class="fi fi-${m.country.toLowerCase()}"></span>` : '';
+                    return `
+                        <div onclick="irADetalle('${m.username}')" class="card-poster group cursor-pointer border border-gray-800 bg-[#16121d] relative rounded-2xl overflow-hidden shadow-lg hover:shadow-[0_0_20px_rgba(255,0,85,0.3)]">
+                            <img src="${m.image_url_360x270}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#0B0910] via-[#0B0910]/40 to-transparent z-10"></div>
+                            <div class="absolute top-2 right-2 bg-black/80 px-2 py-1 rounded text-[10px] font-bold text-green-400 z-20 flex items-center gap-1 backdrop-blur-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> ${m.num_users}
+                            </div>
+                            <div class="absolute bottom-3 left-3 right-3 z-20">
+                                <h3 class="text-white font-black text-sm truncate flex items-center gap-1.5">${bandera} ${m.username}</h3>
+                                <p class="text-gray-400 text-xs truncate mt-1">${m.room_subject}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                grid.innerHTML += htmlNuevasTarjetas;
+
+                if (hayMasResultados) {
+                    btnMas.classList.remove('hidden');
+                    btnMas.innerHTML = `
+                        <button onclick="cargarMas()" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-full transition border border-gray-600 hover:border-[#FF0055]">
+                            <i class="fas fa-plus-circle mr-2 text-[#FF0055]"></i> CARGAR MÁS
+                        </button>
+                    `;
+                } else {
+                    btnMas.classList.add('hidden');
+                }
+
+            } catch (error) {
+                console.error("Error al filtrar:", error);
+                grid.innerHTML = '<p class="text-red-500 col-span-full text-center py-4">Error al cargar datos.</p>';
+            }
+        }
+
+        // === LÓGICA DE DETALLE Y PERFIL ===
+        function irADetalle(username) {
             document.getElementById('vista-inicio').classList.add('hidden');
             document.getElementById('vista-detalle').classList.remove('hidden');
-            
-            const contenedorVideo = document.getElementById('contenedor-video');
-            
-            // URL LIMPIA Y FIJA
-            const urlVideo = `https://chaturbate.com/embed/${MODELO_FIJA}/?campaign=${MI_WM}`;
-            
-            contenedorVideo.innerHTML = `
-                <iframe src="${urlVideo}" 
-                        class="absolute inset-0 w-full h-full border-none" 
-                        allowfullscreen>
-                </iframe>
-            `;
+            window.scrollTo(0, 0);
+
+            usuarioActualDetalle = username; 
+
+            const modelo = modelosGlobales.find(m => m.username === username);
+            if (!modelo) return;
+
+            document.getElementById('nombre-modelo').innerText = modelo.username;
+            document.getElementById('nombre-modelo-top').innerText = modelo.username;
+            document.getElementById('subject-modelo').innerText = modelo.room_subject ? modelo.room_subject.replace(/<[^>]*>?/gm, '') : '';
+            document.getElementById('avatar-modelo').src = modelo.image_url_360x270;
+            document.getElementById('avatar-modelo-top').src = modelo.image_url_360x270;
+
+            const urlVideo = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&disable_sound=0`;
+            document.getElementById('contenedor-video').innerHTML = `<iframe src="${urlVideo}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
+        }
+
+        function abrirPerfilReal() {
+            if (!usuarioActualDetalle) return;
+            // Abre la página real del perfil de Chaturbate en una nueva pestaña.
+            const urlPerfil = `https://chaturbate.com/${usuarioActualDetalle}/?campaign=${MI_WM}`;
+            window.open(urlPerfil, '_blank');
         }
 
         function irAInicio() {
             document.getElementById('vista-detalle').classList.add('hidden');
             document.getElementById('vista-inicio').classList.remove('hidden');
             document.getElementById('contenedor-video').innerHTML = '';
+            window.scrollTo(0, 0);
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarDatos();
+        });
     </script>
 </body>
 </html>
