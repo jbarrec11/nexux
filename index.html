@@ -1,46 +1,34 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Marca - Estilo Muro de Pósters</title>
+    <title>Mi Marca - En Vivo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Fondo Mosaico Tipo Póster (Lleno de chicas) */
+        /* Fondo Mosaico */
         #bgMosaic {
             position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none;
             background-color: #16121d; 
         }
-        /* La cuadrícula de imágenes */
         .mosaic-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Tarjetas pequeñas */
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 10px;
-            width: 120%; height: 120%; /* Más grande para que no se vean los bordes al hacer zoom */
+            width: 120%; height: 120%;
             position: absolute;
             top: -10%; left: -10%;
-            filter: blur(4px) brightness(0.4) saturate(1.2); /* Desenfoque y oscurecimiento */
+            filter: blur(4px) brightness(0.4) saturate(1.2);
             transform: scale(1.05);
-            animation: slideMosaic 60s linear infinite alternate; /* Movimiento lento del fondo */
+            animation: slideMosaic 60s linear infinite alternate;
         }
-        
-        .mosaic-grid img {
-            width: 100%; height: 100%; object-fit: cover;
-            border-radius: 8px;
-            opacity: 0.8;
-        }
-
-        /* Capa de degradado para que el texto resalte */
+        .mosaic-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; opacity: 0.8; }
         .mosaic-fade {
             position: absolute; inset: 0; z-index: -1;
             background: linear-gradient(180deg, rgba(22,18,29,0.3) 0%, rgba(22,18,29,0.8) 50%, rgba(22,18,29,1) 100%);
         }
-
-        @keyframes slideMosaic {
-            0% { transform: translateY(0) scale(1.05); }
-            100% { transform: translateY(-5%) scale(1.05); }
-        }
+        @keyframes slideMosaic { 0% { transform: translateY(0) scale(1.05); } 100% { transform: translateY(-5%) scale(1.05); } }
 
         /* Ocultar Scrollbars */
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -53,7 +41,7 @@
         .text-neon-4 { text-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff; color: #00ccff; }
         .text-neon-5 { text-shadow: 0 0 10px #aa00ff, 0 0 20px #aa00ff; color: #aa00ff; }
 
-        /* Tarjetas Verticales (Póster) */
+        /* Tarjetas Verticales */
         .card-poster {
             aspect-ratio: 2/3;
             border-radius: 10px;
@@ -62,7 +50,6 @@
             transition: transform 0.3s;
         }
         .card-poster:hover { transform: scale(1.05); z-index: 10; border-color: #ec4899; }
-
         #top10Container { scroll-snap-type: none; }
     </style>
 </head>
@@ -108,7 +95,7 @@
             </div>
         </section>
 
-        <!-- TOP 10 (AUTO-SCROLL FLUIDO) -->
+        <!-- TOP 10 -->
         <section class="mb-10 relative">
             <div class="flex justify-between items-end mb-4 bg-[#16121d]/60 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
                 <h2 class="text-pink-500 font-black text-xl flex items-center gap-2 uppercase tracking-widest" id="lbl-top10">🏆 Top 10 Más Vistos</h2>
@@ -118,7 +105,7 @@
             </div>
         </section>
 
-        <!-- FILTROS Y GRID COMPACTA -->
+        <!-- FILTROS Y GRID -->
         <section class="mb-12">
             <div class="flex justify-between items-center mb-4 bg-[#16121d]/60 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
                 <h2 class="text-white font-bold text-xl flex items-center gap-2" id="lbl-explorar">Explorar</h2>
@@ -144,6 +131,7 @@
         </button>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Columna Izquierda: Video y Chat JUNTOS -->
             <div class="lg:col-span-2 flex flex-col gap-4">
                 <div class="relative w-full rounded-2xl overflow-hidden bg-black border border-gray-800 shadow-2xl" style="aspect-ratio: 16 / 9;">
                     <div id="contenedor-video" class="absolute inset-0 flex items-center justify-center text-gray-500">Cargando video...</div>
@@ -158,11 +146,13 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Columna Derecha: Tu diseño (NO iframe) -->
             <div class="lg:col-span-1 flex flex-col">
                 <div class="bg-[#1a1a1f]/80 backdrop-blur-md rounded-2xl border border-gray-800 flex flex-col h-[600px] shadow-2xl overflow-hidden">
-                    <div class="p-4 border-b border-gray-800 bg-[#16121d]/90"><h3 class="font-bold text-white" id="lbl-chat">💬 Chat en Vivo</h3></div>
-                    <div id="contenedor-chat" class="flex-1 relative">
-                        <div class="absolute inset-0 flex items-center justify-center text-gray-500 text-sm">Cargando chat...</div>
+                    <div class="p-4 border-b border-gray-800 bg-[#16121d]/90"><h3 class="font-bold text-white" id="lbl-chat">💬 Interacción</h3></div>
+                    <div id="contenedor-chat" class="flex-1 relative p-6 flex flex-col items-center justify-center text-center">
+                        <!-- Aquí va tu contenido propio, no el iframe duplicado -->
                     </div>
                 </div>
             </div>
@@ -171,11 +161,11 @@
 
     <script>
         const MI_WM = 'q7k3D';
-        const MODO_DESARROLLO = false; 
+        const MODO_DESARROLLO = false; // Cambiado a false para producción
 
         const textos = {
-            es: { inicio: "Inicio", categorias: "Categorías", ingresar: "Ingresar", destacados: "Destacados", verVivo: "Ver en Vivo", top10: "🏆 Top 10 Más Vistos", explorar: "Explorar", todos: "Todos", mujeres: "Mujeres", hombres: "Hombres", parejas: "Parejas", trans: "Trans", volver: "Volver al inicio", chat: "💬 Chat en Vivo" },
-            en: { inicio: "Home", categorias: "Categories", ingresar: "Log In", destacados: "Featured", verVivo: "Watch Live", top10: "🏆 Top 10 Most Viewed", explorar: "Explore", todos: "All", mujeres: "Women", hombres: "Men", parejas: "Couples", trans: "Trans", volver: "Back to home", chat: "💬 Live Chat" }
+            es: { inicio: "Inicio", categorias: "Categorías", ingresar: "Ingresar", destacados: "Destacados", verVivo: "Ver en Vivo", top10: "🏆 Top 10 Más Vistos", explorar: "Explorar", todos: "Todos", mujeres: "Mujeres", hombres: "Hombres", parejas: "Parejas", trans: "Trans", volver: "Volver al inicio", chat: "💬 Interacción" },
+            en: { inicio: "Home", categorias: "Categories", ingresar: "Log In", destacados: "Featured", verVivo: "Watch Live", top10: "🏆 Top 10 Most Viewed", explorar: "Explore", todos: "All", mujeres: "Women", hombres: "Men", parejas: "Couples", trans: "Trans", volver: "Back to home", chat: "💬 Interaction" }
         };
 
         const userLang = navigator.language || navigator.userAgentLanguage;
@@ -205,7 +195,6 @@
         let top10Container;
         let isTop10Hovered = false;
 
-        // Colección de fotos para el fondo (usando Unsplash para simular modelos)
         const fotosFondo = [
             'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80',
             'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80',
@@ -224,7 +213,6 @@
         function generarFondoMosaico() {
             const grid = document.getElementById('mosaicGrid');
             let html = '';
-            // Generamos 40 imágenes para llenar la pantalla
             for (let i = 0; i < 40; i++) {
                 const imgUrl = fotosFondo[i % fotosFondo.length];
                 html += `<img src="${imgUrl}" alt="fondo">`;
@@ -232,45 +220,23 @@
             grid.innerHTML = html;
         }
 
-        const datosFalsos = [
-            { username: 'Sofiia', room_subject: 'Bailando y charlando 💃', num_users: 15400, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&q=80' },
-            { username: 'Lexi', room_subject: 'Solo un poco de diversión', num_users: 12300, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80' },
-            { username: 'Valery', room_subject: 'Show privado disponible', num_users: 9800, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&q=80' },
-            { username: 'Aria', room_subject: 'Esperando por ti', num_users: 8500, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&q=80' },
-            { username: 'Kira', room_subject: 'Relajándome en casa', num_users: 7200, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?w=500&q=80' },
-            { username: 'Marcus', room_subject: 'Entrenando en vivo', num_users: 6500, gender: 'm', image_url_360x270: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&q=80' },
-            { username: 'Luna', room_subject: 'Noche de chicas', num_users: 5400, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&q=80' },
-            { username: 'Alex & Sam', room_subject: 'Pareja en vivo', num_users: 4300, gender: 'c', image_url_360x270: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=500&q=80' },
-            { username: 'Dani', room_subject: 'Trans y orgullosa', num_users: 3800, gender: 't', image_url_360x270: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&q=80' },
-            { username: 'Chloe', room_subject: 'Un café y buena charla', num_users: 3100, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&q=80' },
-            { username: 'Elena', room_subject: 'Nuevo look', num_users: 2900, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&q=80' },
-            { username: 'Max', room_subject: 'Entrenamiento', num_users: 2500, gender: 'm', image_url_360x270: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&q=80' },
-            { username: 'Sasha', room_subject: 'Hora del show', num_users: 2100, gender: 'f', image_url_360x270: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80' },
-            { username: 'Jorge', room_subject: 'Charlando', num_users: 1800, gender: 'm', image_url_360x270: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&q=80' }
-        ];
-
         async function cargarDatos() {
-            generarFondoMosaico(); // Generar el fondo primero
-
-            if (MODO_DESARROLLO) {
-                modelosGlobales = datosFalsos;
+            generarFondoMosaico();
+            try {
+                const res = await fetch(`/api/proxy?wm=${MI_WM}`);
+                const json = await res.json();
+                modelosGlobales = json.results || [];
+                modelosGlobales.sort((a, b) => parseInt(b.num_users) - parseInt(a.num_users));
                 renderizarTodo();
-            } else {
-                try {
-                    const res = await fetch(`/api/proxy?wm=${MI_WM}`);
-                    const json = await res.json();
-                    modelosGlobales = json.results || [];
-                    modelosGlobales.sort((a, b) => parseInt(b.num_users) - parseInt(a.num_users));
-                    renderizarTodo();
-                } catch (error) {
-                    console.error("Error:", error);
-                }
+            } catch (error) {
+                console.error("Error al cargar datos:", error);
+                document.getElementById('grid-filtros').innerHTML = '<p class="text-red-500 col-span-full text-center">Error de conexión. Revisa Vercel.</p>';
             }
         }
 
         function renderizarTodo() {
             renderizarTop10();
-            renderizarFiltros('all');
+            filtrar('all'); // Carga inicial del grid
             configurarHero();
             iniciarMarquesinaFluida();
         }
@@ -306,7 +272,6 @@
         function iniciarMarquesinaFluida() {
             top10Container = document.getElementById('top10Container');
             if (!top10Container) return;
-            
             const scrollSpeed = 0.7; 
             
             function autoScroll() {
@@ -319,15 +284,12 @@
                 }
                 requestAnimationFrame(autoScroll);
             }
-            
             requestAnimationFrame(autoScroll);
             
             top10Container.addEventListener('mouseenter', () => { isTop10Hovered = true; });
             top10Container.addEventListener('mouseleave', () => { isTop10Hovered = false; });
             top10Container.addEventListener('touchstart', () => { isTop10Hovered = true; });
-            top10Container.addEventListener('touchend', () => { 
-                setTimeout(() => { isTop10Hovered = false; }, 2000);
-            });
+            top10Container.addEventListener('touchend', () => { setTimeout(() => { isTop10Hovered = false; }, 2000); });
         }
 
         function configurarHero() {
@@ -368,7 +330,8 @@
             intervaloHero = setInterval(actualizarHero, 5000);
         }
 
-        function renderizarFiltros(genero) {
+        // FILTROS CORREGIDOS
+        async function filtrar(genero) {
             document.querySelectorAll('.filtro-btn').forEach(btn => {
                 if (btn.dataset.filter === genero) {
                     btn.className = "filtro-btn bg-pink-600 text-white px-4 py-1.5 text-sm rounded-full font-semibold transition";
@@ -377,34 +340,42 @@
                 }
             });
 
-            let filtrados = modelosGlobales;
-            if (genero !== 'all') {
-                filtrados = modelosGlobales.filter(m => m.gender === genero);
-            }
-
             const grid = document.getElementById('grid-filtros');
-            if (filtrados.length === 0) {
-                grid.innerHTML = '<p class="text-gray-500 col-span-full text-center">No hay modelos en esta categoría.</p>';
-                return;
+            grid.innerHTML = '<p class="text-gray-400 col-span-full text-center py-4">Cargando...</p>';
+
+            const genderParam = genero !== 'all' ? `&gender=${genero}` : '';
+
+            try {
+                const res = await fetch(`/api/proxy?wm=${MI_WM}${genderParam}`);
+                const json = await res.json();
+                let filtrados = json.results || [];
+                filtrados.sort((a, b) => parseInt(b.num_users) - parseInt(a.num_users));
+                
+                if (filtrados.length === 0) {
+                    grid.innerHTML = '<p class="text-gray-500 col-span-full text-center py-4">No hay modelos en esta categoría ahora mismo.</p>';
+                    return;
+                }
+
+                grid.innerHTML = filtrados.map(m => {
+                    return `
+                        <div onclick="irADetalle('${m.username}')" class="card-poster group cursor-pointer border border-gray-800 bg-gray-900 relative">
+                            <img src="${m.image_url_360x270}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#16121d] via-[#16121d]/40 to-transparent z-10"></div>
+                            <div class="absolute top-1 right-1 bg-black/70 px-1.5 py-0.5 rounded text-[10px] font-bold text-green-400 z-20 flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> ${m.num_users}
+                            </div>
+                            <div class="absolute bottom-2 left-2 right-2 z-20">
+                                <h3 class="text-white font-bold text-xs truncate">${m.username}</h3>
+                                <p class="text-gray-400 text-[10px] truncate">${m.room_subject}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error("Error al filtrar:", error);
+                grid.innerHTML = '<p class="text-red-500 col-span-full text-center py-4">Error al cargar datos.</p>';
             }
-
-            grid.innerHTML = filtrados.map(m => {
-                return `
-                    <div onclick="irADetalle('${m.username}')" class="card-poster group cursor-pointer border border-gray-800 bg-gray-900 relative">
-                        <img src="${m.image_url_360x270}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#16121d] via-[#16121d]/40 to-transparent z-10"></div>
-                        
-                        <div class="absolute top-1 right-1 bg-black/70 px-1.5 py-0.5 rounded text-[10px] font-bold text-green-400 z-20 flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> ${m.num_users}
-                        </div>
-
-                        <div class="absolute bottom-2 left-2 right-2 z-20">
-                            <h3 class="text-white font-bold text-xs truncate">${m.username}</h3>
-                            <p class="text-gray-400 text-[10px] truncate">${m.room_subject}</p>
-                        </div>
-                    </div>
-                `;
-            }).join('');
         }
 
         function irADetalle(username) {
@@ -419,15 +390,16 @@
             document.getElementById('subject-modelo').innerText = modelo.room_subject ? modelo.room_subject.replace(/<[^>]*>?/gm, '') : '';
             document.getElementById('avatar-modelo').src = modelo.image_url_360x270;
 
-            if (MODO_DESARROLLO) {
-                document.getElementById('contenedor-video').innerHTML = `<div class="absolute inset-0 flex items-center justify-center bg-gray-900 text-pink-500 font-bold">[Video de ${modelo.username}]</div>`;
-                document.getElementById('contenedor-chat').innerHTML = `<div class="absolute inset-0 flex items-center justify-center bg-gray-900 text-pink-500 font-bold">[Chat de ${modelo.username}]</div>`;
-            } else {
-                const urlVideo = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&disable_sound=0`;
-                document.getElementById('contenedor-video').innerHTML = `<iframe src="${urlVideo}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
-                const urlChat = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&chat=true`;
-                document.getElementById('contenedor-chat').innerHTML = `<iframe src="${urlChat}" class="absolute inset-0 w-full h-full border-none"></iframe>`;
-            }
+            // SOLO UN IFRAME (Video + Chat juntos)
+            const urlVideo = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&disable_sound=0`;
+            document.getElementById('contenedor-video').innerHTML = `<iframe src="${urlVideo}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
+
+            // La columna derecha se llena con contenido propio
+            document.getElementById('contenedor-chat').innerHTML = `
+                <p class="text-pink-500 font-bold mb-2"><i class="fas fa-comments"></i> Chat Integrado</p>
+                <p class="text-gray-300 text-sm">El chat y las compras de tokens están dentro del reproductor de la izquierda.</p>
+                <p class="text-gray-500 text-xs mt-4">Haz clic en el reproductor para interactuar con la modelo.</p>
+            `;
         }
 
         function irAInicio() {
