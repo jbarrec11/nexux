@@ -29,24 +29,17 @@
         #top10Container { scroll-snap-type: none; }
         .fi { display: inline-block; width: 1.2em; height: 0.9em; background-size: contain; background-position: 50%; background-repeat: no-repeat; vertical-align: middle; border-radius: 2px; }
 
-        /* Selector de país oscuro */
         select#filtro-pais { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-color: transparent; color: #f4f1ff; border: none; outline: none; cursor: pointer; }
         select#filtro-pais option { background-color: #1f2937; color: #ffffff; padding: 10px; }
-
-        /* Animación del modal */
-        #modalPerfil { transition: opacity 0.3s ease; }
-        #modalPerfil.hidden { opacity: 0; pointer-events: none; }
     </style>
 </head>
 <body class="bg-[#16121d] text-[#f4f1ff] font-sans min-h-screen relative flex flex-col">
 
-    <!-- FONDO MOSAICO -->
     <div id="bgMosaic">
         <div class="mosaic-grid" id="mosaicGrid"></div>
         <div class="mosaic-fade"></div>
     </div>
 
-    <!-- HEADER -->
     <header class="border-b border-gray-800 bg-[#16121d]/95 backdrop-blur-md sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <h1 onclick="irAInicio()" class="text-pink-500 font-black text-2xl tracking-widest cursor-pointer hover:text-pink-400 transition">MI MARCA</h1>
@@ -60,8 +53,6 @@
 
     <!-- VISTA 1: INICIO -->
     <main id="vista-inicio" class="max-w-7xl mx-auto p-4 md:p-8 relative z-10 flex-grow w-full">
-        
-        <!-- HERO -->
         <section class="mb-10">
             <div class="bg-[#1a1a1f]/90 backdrop-blur-md rounded-2xl overflow-hidden flex flex-col md:flex-row border border-gray-700/50 relative h-[300px] shadow-2xl">
                 <div class="w-full md:w-1/4 h-full relative bg-black">
@@ -80,7 +71,6 @@
             </div>
         </section>
 
-        <!-- TOP 10 -->
         <section class="mb-10 relative">
             <div class="flex justify-between items-end mb-4 bg-[#16121d]/90 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
                 <h2 class="text-pink-500 font-black text-xl flex items-center gap-2 uppercase tracking-widest">🏆 Top 10 Más Vistos</h2>
@@ -90,7 +80,6 @@
             </div>
         </section>
 
-        <!-- FILTROS Y GRID -->
         <section class="mb-12">
             <div class="flex justify-between items-center mb-4 bg-[#16121d]/90 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
                 <h2 class="text-white font-bold text-xl flex items-center gap-2">Explorar</h2>
@@ -148,7 +137,6 @@
             </div>
         </div>
 
-        <!-- Reproductor Principal -->
         <div class="relative w-full rounded-2xl overflow-hidden bg-black border border-gray-800 shadow-2xl" style="aspect-ratio: 16 / 9;">
             <div id="contenedor-video" class="absolute inset-0 flex items-center justify-center text-gray-500">
                 <div class="text-center">
@@ -158,7 +146,6 @@
             </div>
         </div>
         
-        <!-- Información de la modelo + BOTÓN DE PERFIL -->
         <div class="bg-[#1a1a1f]/90 backdrop-blur-md rounded-2xl p-4 md:p-6 border border-gray-800 mt-4 flex flex-col md:flex-row items-start md:items-center justify-between shadow-lg gap-4">
             <div class="flex items-center gap-4">
                 <img id="avatar-modelo" src="" class="w-16 h-16 rounded-full object-cover border-2 border-pink-500 bg-gray-800">
@@ -176,23 +163,6 @@
             </div>
         </div>
     </main>
-
-    <!-- MODAL PARA EL PERFIL (Oculto por defecto) -->
-    <div id="modalPerfil" class="fixed inset-0 z-[100] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-[#1a1a1f] border border-gray-700 rounded-2xl w-full max-w-4xl h-[80vh] flex flex-col shadow-2xl overflow-hidden relative">
-            <div class="flex justify-between items-center p-4 border-b border-gray-800 bg-[#16121d]">
-                <h3 class="text-white font-bold flex items-center gap-2"><i class="fas fa-user-circle text-pink-500"></i> Perfil de la Modelo</h3>
-                <button onclick="cerrarModalPerfil()" class="text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 p-2 rounded-full transition">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="flex-1 w-full bg-white relative">
-                <div id="contenedor-perfil-modal" class="absolute inset-0 flex items-center justify-center text-gray-500">
-                    <i class="fas fa-spinner fa-spin mr-2"></i> Cargando perfil...
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- FOOTER -->
     <footer class="bg-[#0b0910] border-t border-gray-800 mt-12 py-10 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
@@ -277,7 +247,6 @@
         const limitePorPagina = 30;
         let hayMasResultados = true;
         
-        // Variable para el Modal de Perfil
         let usuarioActualDetalle = "";
 
         const fotosFondo = [
@@ -522,7 +491,7 @@
             document.getElementById('vista-detalle').classList.remove('hidden');
             window.scrollTo(0, 0);
 
-            usuarioActualDetalle = username; // Guardamos el nombre para el modal
+            usuarioActualDetalle = username; 
 
             const modelo = modelosGlobales.find(m => m.username === username);
             if (!modelo) return;
@@ -538,25 +507,10 @@
         }
 
         function abrirModalPerfil() {
-            const modal = document.getElementById('modalPerfil');
-            const contenedor = document.getElementById('contenedor-perfil-modal');
-            
-            // Cargamos la URL real del perfil de Chaturbate
+            // Al hacer clic, abrimos el perfil en una nueva pestaña.
+            // Usamos la URL real del perfil para que cargue la biografía completa.
             const urlPerfil = `https://chaturbate.com/${usuarioActualDetalle}/?campaign=${MI_WM}`;
-            
-            contenedor.innerHTML = `<iframe src="${urlPerfil}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
-            
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Evitar scroll de fondo
-        }
-
-        function cerrarModalPerfil() {
-            const modal = document.getElementById('modalPerfil');
-            const contenedor = document.getElementById('contenedor-perfil-modal');
-            
-            modal.classList.add('hidden');
-            contenedor.innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Cargando perfil...</div>';
-            document.body.style.overflow = 'auto'; // Restaurar scroll
+            window.open(urlPerfil, '_blank');
         }
 
         function irAInicio() {
