@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
     <style>
-        /* Fondo general más oscuro y premium */
         #bgMosaic { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; background-color: #0B0910; }
         .mosaic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; width: 120%; height: 120%; position: absolute; top: -10%; left: -10%; filter: blur(5px) brightness(0.2) saturate(1.5); transform: scale(1.05); animation: slideMosaic 60s linear infinite alternate; }
         .mosaic-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; opacity: 0.6; }
@@ -18,7 +17,6 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Efectos Neón */
         .text-neon-1 { text-shadow: 0 0 10px #FF0055, 0 0 20px #FF0055; color: #FF0055; }
         .text-neon-2 { text-shadow: 0 0 10px #FFCC00, 0 0 20px #FFCC00; color: #FFCC00; }
         .text-neon-3 { text-shadow: 0 0 10px #00FF44, 0 0 20px #00FF44; color: #00FF44; }
@@ -31,26 +29,9 @@
         #top10Container { scroll-snap-type: none; }
         .fi { display: inline-block; width: 1.2em; height: 0.9em; background-size: contain; background-position: 50%; background-repeat: no-repeat; vertical-align: middle; border-radius: 2px; }
 
-        /* Selector de país oscuro y elegante */
-        select#filtro-pais {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-color: transparent;
-            color: #fff;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.75rem;
-        }
-        select#filtro-pais option {
-            background-color: #16121d;
-            color: #fff;
-            padding: 10px;
-        }
+        select#filtro-pais { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-color: transparent; color: #fff; border: none; outline: none; cursor: pointer; font-weight: 600; font-size: 0.75rem; }
+        select#filtro-pais option { background-color: #16121d; color: #fff; padding: 10px; }
 
-        /* Estilo del Logo de Texto Neón */
         .logo-neon {
             font-family: 'Arial Black', sans-serif;
             text-transform: uppercase;
@@ -300,7 +281,6 @@
         async function cargarDatos() {
             generarFondoMosaico();
             try {
-                // Carga inicial: pedimos 50 para tener el Top 10 y el Hero
                 const res = await fetch(`/api/proxy?wm=${MI_WM}&limit=50`);
                 const json = await res.json();
                 modelosGlobales = json.results || [];
@@ -531,8 +511,20 @@
             document.getElementById('avatar-modelo').src = modelo.image_url_360x270;
             document.getElementById('avatar-modelo-top').src = modelo.image_url_360x270;
 
-            const urlVideo = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&disable_sound=0`;
-            document.getElementById('contenedor-video').innerHTML = `<iframe src="${urlVideo}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
+            // Mostramos el spinner mientras esperamos el pequeño retraso para cargar el iframe
+            const contenedorVideo = document.getElementById('contenedor-video');
+            contenedorVideo.innerHTML = `
+                <div class="text-center">
+                    <i class="fas fa-spinner fa-spin text-4xl mb-4 text-[#FF0055]"></i>
+                    <p class="font-bold tracking-widest text-white">CONECTANDO CON LA SALA...</p>
+                </div>
+            `;
+
+            // Retraso de 500ms para que el navegador no bloquee el iframe por el cambio de vista
+            setTimeout(() => {
+                const urlVideo = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&disable_sound=0&autoplay=true`;
+                contenedorVideo.innerHTML = `<iframe src="${urlVideo}" class="absolute inset-0 w-full h-full border-none" allowfullscreen allow="autoplay; fullscreen"></iframe>`;
+            }, 500);
         }
 
         function abrirPerfilReal() {
