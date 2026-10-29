@@ -29,18 +29,25 @@
         #top10Container { scroll-snap-type: none; }
         .fi { display: inline-block; width: 1.2em; height: 0.9em; background-size: contain; background-position: 50%; background-repeat: no-repeat; vertical-align: middle; border-radius: 2px; }
 
+        /* Selector de país oscuro */
         select#filtro-pais { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-color: transparent; color: #f4f1ff; border: none; outline: none; cursor: pointer; }
         select#filtro-pais option { background-color: #1f2937; color: #ffffff; padding: 10px; }
+
+        /* Animación del modal */
+        #modalPerfil { transition: opacity 0.3s ease; }
+        #modalPerfil.hidden { opacity: 0; pointer-events: none; }
     </style>
 </head>
 <body class="bg-[#16121d] text-[#f4f1ff] font-sans min-h-screen relative flex flex-col">
 
+    <!-- FONDO MOSAICO -->
     <div id="bgMosaic">
         <div class="mosaic-grid" id="mosaicGrid"></div>
         <div class="mosaic-fade"></div>
     </div>
 
-    <header class="border-b border-gray-800 bg-[#16121d]/95 backdrop-blur-md sticky top-0 z-50">
+    <!-- HEADER -->
+    <header class="border-b border-gray-800 bg-[#16121d]/95 backdrop-blur-md sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <h1 onclick="irAInicio()" class="text-pink-500 font-black text-2xl tracking-widest cursor-pointer hover:text-pink-400 transition">MI MARCA</h1>
             <nav class="hidden md:flex gap-6 text-sm font-semibold text-gray-400">
@@ -53,6 +60,8 @@
 
     <!-- VISTA 1: INICIO -->
     <main id="vista-inicio" class="max-w-7xl mx-auto p-4 md:p-8 relative z-10 flex-grow w-full">
+        
+        <!-- HERO -->
         <section class="mb-10">
             <div class="bg-[#1a1a1f]/90 backdrop-blur-md rounded-2xl overflow-hidden flex flex-col md:flex-row border border-gray-700/50 relative h-[300px] shadow-2xl">
                 <div class="w-full md:w-1/4 h-full relative bg-black">
@@ -71,6 +80,7 @@
             </div>
         </section>
 
+        <!-- TOP 10 -->
         <section class="mb-10 relative">
             <div class="flex justify-between items-end mb-4 bg-[#16121d]/90 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
                 <h2 class="text-pink-500 font-black text-xl flex items-center gap-2 uppercase tracking-widest">🏆 Top 10 Más Vistos</h2>
@@ -80,6 +90,7 @@
             </div>
         </section>
 
+        <!-- FILTROS Y GRID -->
         <section class="mb-12">
             <div class="flex justify-between items-center mb-4 bg-[#16121d]/90 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
                 <h2 class="text-white font-bold text-xl flex items-center gap-2">Explorar</h2>
@@ -147,7 +158,7 @@
             </div>
         </div>
         
-        <!-- Información de la modelo -->
+        <!-- Información de la modelo + BOTÓN DE PERFIL -->
         <div class="bg-[#1a1a1f]/90 backdrop-blur-md rounded-2xl p-4 md:p-6 border border-gray-800 mt-4 flex flex-col md:flex-row items-start md:items-center justify-between shadow-lg gap-4">
             <div class="flex items-center gap-4">
                 <img id="avatar-modelo" src="" class="w-16 h-16 rounded-full object-cover border-2 border-pink-500 bg-gray-800">
@@ -156,26 +167,34 @@
                     <p id="subject-modelo" class="text-sm text-gray-400">...</p>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <span class="bg-gray-800 text-gray-300 text-xs px-3 py-1 rounded-full border border-gray-700">En vivo</span>
-                <span class="bg-pink-600 text-white text-xs px-3 py-1 rounded-full font-bold">Top Model</span>
-            </div>
-        </div>
-
-        <!-- NUEVO: Iframe de Biografía / Perfil de la Modelo -->
-        <div class="mt-6 bg-[#1a1a1f]/90 backdrop-blur-md rounded-2xl border border-gray-800 shadow-xl overflow-hidden">
-            <div class="p-4 border-b border-gray-800 bg-[#16121d]/90 flex items-center gap-2">
-                <i class="fas fa-user-circle text-pink-500"></i>
-                <h3 class="font-bold text-white">Perfil y Biografía</h3>
-            </div>
-            <div id="contenedor-perfil" class="w-full h-[400px] relative bg-white">
-                <div class="absolute inset-0 flex items-center justify-center text-gray-400 bg-gray-900">
-                    <i class="fas fa-spinner fa-spin mr-2"></i> Cargando perfil...
-                </div>
+            <div class="flex items-center gap-3">
+                <button onclick="abrirModalPerfil()" class="bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2">
+                    <i class="fas fa-user-circle text-pink-500"></i> Ver Perfil Completo
+                </button>
+                <span class="bg-gray-800 text-gray-300 text-xs px-3 py-1 rounded-full border border-gray-700 hidden md:inline">En vivo</span>
+                <span class="bg-pink-600 text-white text-xs px-3 py-1 rounded-full font-bold hidden md:inline">Top Model</span>
             </div>
         </div>
     </main>
 
+    <!-- MODAL PARA EL PERFIL (Oculto por defecto) -->
+    <div id="modalPerfil" class="fixed inset-0 z-[100] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-[#1a1a1f] border border-gray-700 rounded-2xl w-full max-w-4xl h-[80vh] flex flex-col shadow-2xl overflow-hidden relative">
+            <div class="flex justify-between items-center p-4 border-b border-gray-800 bg-[#16121d]">
+                <h3 class="text-white font-bold flex items-center gap-2"><i class="fas fa-user-circle text-pink-500"></i> Perfil de la Modelo</h3>
+                <button onclick="cerrarModalPerfil()" class="text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 p-2 rounded-full transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex-1 w-full bg-white relative">
+                <div id="contenedor-perfil-modal" class="absolute inset-0 flex items-center justify-center text-gray-500">
+                    <i class="fas fa-spinner fa-spin mr-2"></i> Cargando perfil...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
     <footer class="bg-[#0b0910] border-t border-gray-800 mt-12 py-10 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-8">
@@ -253,9 +272,13 @@
         let isTop10Hovered = false;
         let generoActual = 'all';
         
+        // Variables de Paginación
         let paginaActual = 0;
         const limitePorPagina = 30;
         let hayMasResultados = true;
+        
+        // Variable para el Modal de Perfil
+        let usuarioActualDetalle = "";
 
         const fotosFondo = [
             'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80',
@@ -493,10 +516,13 @@
             }
         }
 
+        // === LÓGICA DE DETALLE Y MODAL ===
         function irADetalle(username) {
             document.getElementById('vista-inicio').classList.add('hidden');
             document.getElementById('vista-detalle').classList.remove('hidden');
             window.scrollTo(0, 0);
+
+            usuarioActualDetalle = username; // Guardamos el nombre para el modal
 
             const modelo = modelosGlobales.find(m => m.username === username);
             if (!modelo) return;
@@ -507,21 +533,36 @@
             document.getElementById('avatar-modelo').src = modelo.image_url_360x270;
             document.getElementById('avatar-modelo-top').src = modelo.image_url_360x270;
 
-            // 1. Cargar Iframe del Video y Chat
             const urlVideo = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&disable_sound=0`;
             document.getElementById('contenedor-video').innerHTML = `<iframe src="${urlVideo}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
+        }
 
-            // 2. Cargar Iframe del Perfil / Biografía
-            // El parámetro para ver el perfil en el embed de Chaturbate suele ser 'tab=bio' o similar.
-            const urlPerfil = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&tab=profile`;
-            document.getElementById('contenedor-perfil').innerHTML = `<iframe src="${urlPerfil}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
+        function abrirModalPerfil() {
+            const modal = document.getElementById('modalPerfil');
+            const contenedor = document.getElementById('contenedor-perfil-modal');
+            
+            // Cargamos la URL real del perfil de Chaturbate
+            const urlPerfil = `https://chaturbate.com/${usuarioActualDetalle}/?campaign=${MI_WM}`;
+            
+            contenedor.innerHTML = `<iframe src="${urlPerfil}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Evitar scroll de fondo
+        }
+
+        function cerrarModalPerfil() {
+            const modal = document.getElementById('modalPerfil');
+            const contenedor = document.getElementById('contenedor-perfil-modal');
+            
+            modal.classList.add('hidden');
+            contenedor.innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Cargando perfil...</div>';
+            document.body.style.overflow = 'auto'; // Restaurar scroll
         }
 
         function irAInicio() {
             document.getElementById('vista-detalle').classList.add('hidden');
             document.getElementById('vista-inicio').classList.remove('hidden');
             document.getElementById('contenedor-video').innerHTML = '';
-            document.getElementById('contenedor-perfil').innerHTML = ''; // Limpiamos el perfil al salir
             window.scrollTo(0, 0);
         }
 
