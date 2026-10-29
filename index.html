@@ -3,123 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Marca - En Vivo</title>
+    <title>NEXUS CAM - El Portal del Placer en Vivo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
     <style>
-        #bgMosaic { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; background-color: #16121d; }
-        .mosaic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; width: 120%; height: 120%; position: absolute; top: -10%; left: -10%; filter: blur(4px) brightness(0.3) saturate(1.2); transform: scale(1.05); animation: slideMosaic 60s linear infinite alternate; }
-        .mosaic-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; opacity: 0.8; }
-        .mosaic-fade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(22,18,29,0.5) 0%, rgba(22,18,29,0.9) 50%, rgba(22,18,29,1) 100%); }
+        /* Fondo general más oscuro y premium */
+        #bgMosaic { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; background-color: #0B0910; }
+        .mosaic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; width: 120%; height: 120%; position: absolute; top: -10%; left: -10%; filter: blur(5px) brightness(0.2) saturate(1.5); transform: scale(1.05); animation: slideMosaic 60s linear infinite alternate; }
+        .mosaic-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; opacity: 0.6; }
+        .mosaic-fade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(11,9,16,0.6) 0%, rgba(11,9,16,0.9) 50%, rgba(11,9,16,1) 100%); }
         @keyframes slideMosaic { 0% { transform: translateY(0) scale(1.05); } 100% { transform: translateY(-5%) scale(1.05); } }
         
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        .text-neon-1 { text-shadow: 0 0 10px #ff0044, 0 0 20px #ff0044; color: #ff0044; }
-        .text-neon-2 { text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00; color: #ffcc00; }
-        .text-neon-3 { text-shadow: 0 0 10px #00ff44, 0 0 20px #00ff44; color: #00ff44; }
-        .text-neon-4 { text-shadow: 0 0 10px #00ccff, 0 0 20px #00ccff; color: #00ccff; }
-        .text-neon-5 { text-shadow: 0 0 10px #aa00ff, 0 0 20px #aa00ff; color: #aa00ff; }
+        /* Efectos Neón para el Top 10 */
+        .text-neon-1 { text-shadow: 0 0 10px #FF0055, 0 0 20px #FF0055; color: #FF0055; }
+        .text-neon-2 { text-shadow: 0 0 10px #FFCC00, 0 0 20px #FFCC00; color: #FFCC00; }
+        .text-neon-3 { text-shadow: 0 0 10px #00FF44, 0 0 20px #00FF44; color: #00FF44; }
+        .text-neon-4 { text-shadow: 0 0 10px #00CCFF, 0 0 20px #00CCFF; color: #00CCFF; }
+        .text-neon-5 { text-shadow: 0 0 10px #9D00FF, 0 0 20px #9D00FF; color: #9D00FF; }
         
         .card-poster { aspect-ratio: 2/3; border-radius: 10px; overflow: hidden; position: relative; transition: transform 0.3s; }
-        .card-poster:hover { transform: scale(1.05); z-index: 10; border-color: #ec4899; }
+        .card-poster:hover { transform: scale(1.05); z-index: 10; border-color: #FF0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.5); }
         
         #top10Container { scroll-snap-type: none; }
         .fi { display: inline-block; width: 1.2em; height: 0.9em; background-size: contain; background-position: 50%; background-repeat: no-repeat; vertical-align: middle; border-radius: 2px; }
 
+        /* Selector de país oscuro */
         select#filtro-pais { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-color: transparent; color: #f4f1ff; border: none; outline: none; cursor: pointer; }
         select#filtro-pais option { background-color: #1f2937; color: #ffffff; padding: 10px; }
+
+        /* Estilo del Logo de Texto Neón */
+        .logo-neon {
+            font-family: 'Arial Black', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #FF0055, #9D00FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+        }
     </style>
 </head>
-<body class="bg-[#16121d] text-[#f4f1ff] font-sans min-h-screen relative flex flex-col">
+<body class="bg-[#0B0910] text-[#f4f1ff] font-sans min-h-screen relative flex flex-col">
 
+    <!-- FONDO MOSAICO -->
     <div id="bgMosaic">
         <div class="mosaic-grid" id="mosaicGrid"></div>
         <div class="mosaic-fade"></div>
     </div>
 
-    <header class="border-b border-gray-800 bg-[#16121d]/95 backdrop-blur-md sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <h1 onclick="irAInicio()" class="text-pink-500 font-black text-2xl tracking-widest cursor-pointer hover:text-pink-400 transition">MI MARCA</h1>
-            <nav class="hidden md:flex gap-6 text-sm font-semibold text-gray-400">
-                <a href="#" onclick="irAInicio()" class="hover:text-white transition">Inicio</a>
-                <a href="#" class="hover:text-white transition">Categorías</a>
+    <!-- HEADER -->
+    <header class="border-b border-gray-800/50 bg-[#0B0910]/80 backdrop-blur-xl sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+            <!-- LOGO NEXUS CAM -->
+            <h1 onclick="irAInicio()" class="logo-neon text-3xl cursor-pointer hover:scale-105 transition-transform">
+                NEXUS<span class="text-white text-opacity-80">CAM</span>
+            </h1>
+            <nav class="hidden md:flex gap-8 text-sm font-bold tracking-wider text-gray-400">
+                <a href="#" onclick="irAInicio()" class="hover:text-[#FF0055] transition-colors">INICIO</a>
+                <a href="#" class="hover:text-[#FF0055] transition-colors">CATEGORÍAS</a>
+                <a href="#" class="hover:text-[#FF0055] transition-colors">TOP MODELOS</a>
             </nav>
-            <button class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow-lg shadow-pink-600/30">Ingresar</button>
+            <button class="bg-gradient-to-r from-[#FF0055] to-[#9D00FF] hover:from-[#FF0055] hover:to-[#FF0055] text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-[0_0_15px_rgba(255,0,85,0.4)]">
+                INGRESAR
+            </button>
         </div>
     </header>
 
     <!-- VISTA 1: INICIO -->
     <main id="vista-inicio" class="max-w-7xl mx-auto p-4 md:p-8 relative z-10 flex-grow w-full">
-        <section class="mb-10">
-            <div class="bg-[#1a1a1f]/90 backdrop-blur-md rounded-2xl overflow-hidden flex flex-col md:flex-row border border-gray-700/50 relative h-[300px] shadow-2xl">
+        
+        <!-- HERO -->
+        <section class="mb-12">
+            <div class="bg-[#16121d]/80 backdrop-blur-xl rounded-3xl overflow-hidden flex flex-col md:flex-row border border-gray-700/50 relative h-[350px] shadow-2xl">
                 <div class="w-full md:w-1/4 h-full relative bg-black">
                     <img id="hero-img" src="" class="w-full h-full object-cover transition-opacity duration-500 opacity-100" alt="Destacado">
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent to-[#1a1a1f] hidden md:block"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent to-[#16121d] hidden md:block"></div>
                 </div>
-                <div class="w-full md:w-3/4 p-6 md:p-10 flex flex-col justify-center relative z-10">
-                    <span class="text-pink-600 font-bold text-xs tracking-widest uppercase mb-1">Destacados</span>
-                    <h2 id="hero-titulo" class="text-2xl md:text-4xl font-black text-white mb-2 leading-tight">Cargando...</h2>
-                    <p id="hero-desc" class="text-gray-300 text-sm mb-4 line-clamp-2">...</p>
+                <div class="w-full md:w-3/4 p-8 md:p-12 flex flex-col justify-center relative z-10">
+                    <span class="text-[#FF0055] font-black text-xs tracking-widest uppercase mb-2 flex items-center gap-2">
+                        <i class="fas fa-star"></i> DESTACADO DE LA SEMANA
+                    </span>
+                    <h2 id="hero-titulo" class="text-3xl md:text-5xl font-black text-white mb-4 leading-tight">Cargando...</h2>
+                    <p id="hero-desc" class="text-gray-400 text-sm md:text-base mb-8 line-clamp-2 max-w-2xl">...</p>
                     <div>
-                        <button onclick="irADetalle(document.getElementById('hero-titulo').innerText)" class="bg-white text-black font-bold py-2 px-6 rounded-lg hover:bg-gray-200 transition shadow-lg text-sm">Ver en Vivo</button>
+                        <button onclick="irADetalle(document.getElementById('hero-titulo').innerText)" class="bg-white text-black font-black py-3 px-8 rounded-full hover:bg-gray-200 transition shadow-[0_0_20px_rgba(255,255,255,0.3)] text-sm flex items-center gap-2">
+                            <i class="fas fa-play"></i> VER AHORA
+                        </button>
                     </div>
                 </div>
-                <div id="hero-miniaturas" class="absolute bottom-3 right-4 hidden lg:flex gap-2 z-20"></div>
+                <div id="hero-miniaturas" class="absolute bottom-6 right-6 hidden lg:flex gap-3 z-20"></div>
             </div>
         </section>
 
-        <section class="mb-10 relative">
-            <div class="flex justify-between items-end mb-4 bg-[#16121d]/90 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
-                <h2 class="text-pink-500 font-black text-xl flex items-center gap-2 uppercase tracking-widest">🏆 Top 10 Más Vistos</h2>
+        <!-- TOP 10 -->
+        <section class="mb-12 relative">
+            <div class="flex justify-between items-end mb-6 bg-[#16121d]/60 backdrop-blur-md p-4 rounded-2xl border border-gray-800/50">
+                <h2 class="text-[#FF0055] font-black text-2xl flex items-center gap-3 uppercase tracking-widest">
+                    <i class="fas fa-crown text-yellow-400"></i> Top 10 Más Vistos
+                </h2>
             </div>
             <div id="top10Container" class="overflow-x-auto pt-4 pb-8 no-scrollbar w-full">
-                <div id="carrusel-top" class="flex gap-4 w-max"></div>
+                <div id="carrusel-top" class="flex gap-6 w-max"></div>
             </div>
         </section>
 
+        <!-- FILTROS Y GRID -->
         <section class="mb-12">
-            <div class="flex justify-between items-center mb-4 bg-[#16121d]/90 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
-                <h2 class="text-white font-bold text-xl flex items-center gap-2">Explorar</h2>
-            </div>
-            
-            <div class="flex flex-wrap items-center gap-4 mb-6">
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="filtrar('all')" class="filtro-btn bg-pink-600 text-white px-4 py-1.5 text-sm rounded-full font-semibold transition" data-filter="all">Todos</button>
-                    <button onclick="filtrar('f')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="f">Mujeres</button>
-                    <button onclick="filtrar('m')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="m">Hombres</button>
-                    <button onclick="filtrar('c')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="c">Parejas</button>
-                    <button onclick="filtrar('t')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="t">Trans</button>
-                </div>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 bg-[#16121d]/60 backdrop-blur-md p-4 rounded-2xl border border-gray-800/50 gap-4">
+                <h2 class="text-white font-black text-2xl flex items-center gap-2">EXPLORAR</h2>
                 
-                <div class="relative flex items-center gap-2 bg-gray-800/90 rounded-full px-4 py-1.5 border border-gray-600 hover:border-pink-500 transition-colors">
-                    <i class="fas fa-globe text-pink-500 text-sm"></i>
-                    <select id="filtro-pais" onchange="aplicarFiltros()" class="bg-transparent text-white text-sm font-semibold w-48">
-                        <option value="">Todos los países</option>
-                        <option value="region:europa">🌍 Europa</option>
-                        <option value="region:sudamerica">🌎 Sudamérica</option>
-                        <option value="region:norteamerica">🌎 Norteamérica</option>
-                        <option value="region:asia">🌏 Asia</option>
-                        <option value="country:CO">🇨🇴 Colombia</option>
-                        <option value="country:ES">🇪🇸 España</option>
-                        <option value="country:US">🇺🇸 Estados Unidos</option>
-                        <option value="country:MX">🇲🇽 México</option>
-                        <option value="country:AR">🇦🇷 Argentina</option>
-                        <option value="country:CL">🇨🇱 Chile</option>
-                        <option value="country:BR">🇧🇷 Brasil</option>
-                        <option value="country:PE">🇵🇪 Perú</option>
-                    </select>
-                    <i class="fas fa-chevron-down text-gray-400 text-xs pointer-events-none absolute right-3"></i>
+                <div class="flex flex-wrap items-center gap-3">
+                    <!-- Botones de Género -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filtrar('all')" class="filtro-btn bg-[#FF0055] text-white px-5 py-2 text-xs font-bold rounded-full transition shadow-[0_0_10px_rgba(255,0,85,0.4)]" data-filter="all">TODOS</button>
+                        <button onclick="filtrar('f')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-5 py-2 text-xs font-bold rounded-full transition border border-gray-700" data-filter="f">MUJERES</button>
+                        <button onclick="filtrar('m')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-5 py-2 text-xs font-bold rounded-full transition border border-gray-700" data-filter="m">HOMBRES</button>
+                        <button onclick="filtrar('c')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-5 py-2 text-xs font-bold rounded-full transition border border-gray-700" data-filter="c">PAREJAS</button>
+                        <button onclick="filtrar('t')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-5 py-2 text-xs font-bold rounded-full transition border border-gray-700" data-filter="t">TRANS</button>
+                    </div>
+                    
+                    <!-- Selector de País -->
+                    <div class="relative flex items-center gap-2 bg-gray-800/90 rounded-full px-4 py-2 border border-gray-600 hover:border-[#FF0055] transition-colors">
+                        <i class="fas fa-globe text-[#FF0055] text-sm"></i>
+                        <select id="filtro-pais" onchange="aplicarFiltros()" class="bg-transparent text-white text-xs font-bold w-40 outline-none">
+                            <option value="">TODOS LOS PAÍSES</option>
+                            <option value="region:europa">🌍 EUROPA</option>
+                            <option value="region:sudamerica">🌎 SUDAMÉRICA</option>
+                            <option value="region:norteamerica">🌎 NORTEAMÉRICA</option>
+                            <option value="region:asia">🌏 ASIA</option>
+                            <option value="country:CO">🇨🇴 COLOMBIA</option>
+                            <option value="country:ES">🇪🇸 ESPAÑA</option>
+                            <option value="country:US">🇺🇸 ESTADOS UNIDOS</option>
+                            <option value="country:MX">🇲🇽 MÉXICO</option>
+                            <option value="country:AR">🇦🇷 ARGENTINA</option>
+                        </select>
+                        <i class="fas fa-chevron-down text-gray-400 text-xs pointer-events-none absolute right-3"></i>
+                    </div>
                 </div>
             </div>
             
-            <div id="grid-filtros" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 md:gap-3"></div>
+            <div id="grid-filtros" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4"></div>
             
-            <div id="contenedor-cargar-mas" class="w-full flex justify-center mt-6 hidden">
-                <button onclick="cargarMas()" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-full transition border border-gray-600">
-                    <i class="fas fa-plus-circle mr-2"></i> Cargar más salas
+            <div id="contenedor-cargar-mas" class="w-full flex justify-center mt-8 hidden">
+                <button onclick="cargarMas()" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-full transition border border-gray-600 hover:border-[#FF0055]">
+                    <i class="fas fa-plus-circle mr-2 text-[#FF0055]"></i> CARGAR MÁS
                 </button>
             </div>
         </section>
@@ -127,107 +158,102 @@
 
     <!-- VISTA 2: DETALLE -->
     <main id="vista-detalle" class="max-w-7xl mx-auto p-4 md:p-8 hidden relative z-10 flex-grow w-full">
-        <div class="flex justify-between items-center mb-4">
-            <button onclick="irAInicio()" class="text-gray-400 hover:text-white flex items-center gap-2 text-sm font-bold transition bg-[#16121d]/90 px-4 py-2 rounded-lg w-fit">
-                <i class="fas fa-arrow-left"></i> Volver al inicio
+        <div class="flex justify-between items-center mb-6">
+            <button onclick="irAInicio()" class="text-gray-400 hover:text-white flex items-center gap-2 text-sm font-bold transition bg-[#16121d]/90 px-5 py-2.5 rounded-full border border-gray-700 hover:border-[#FF0055]">
+                <i class="fas fa-arrow-left"></i> VOLVER
             </button>
-            <div class="flex items-center gap-3">
-                <img id="avatar-modelo-top" src="" class="w-10 h-10 rounded-full object-cover border-2 border-pink-500 bg-gray-800 hidden md:block">
-                <h2 id="nombre-modelo-top" class="text-xl font-bold text-white hidden md:block">...</h2>
+            <div class="flex items-center gap-4">
+                <img id="avatar-modelo-top" src="" class="w-12 h-12 rounded-full object-cover border-2 border-[#FF0055] bg-gray-800 hidden md:block">
+                <h2 id="nombre-modelo-top" class="text-xl font-black text-white hidden md:block tracking-wider">...</h2>
             </div>
         </div>
 
-        <div class="relative w-full rounded-2xl overflow-hidden bg-black border border-gray-800 shadow-2xl" style="aspect-ratio: 16 / 9;">
+        <div class="relative w-full rounded-3xl overflow-hidden bg-black border border-gray-800 shadow-2xl" style="aspect-ratio: 16 / 9;">
             <div id="contenedor-video" class="absolute inset-0 flex items-center justify-center text-gray-500">
                 <div class="text-center">
-                    <i class="fas fa-spinner fa-spin text-3xl mb-2 text-pink-500"></i>
-                    <p>Cargando sala...</p>
+                    <i class="fas fa-spinner fa-spin text-4xl mb-4 text-[#FF0055]"></i>
+                    <p class="font-bold tracking-widest">CARGANDO SALA...</p>
                 </div>
             </div>
         </div>
         
-        <div class="bg-[#1a1a1f]/90 backdrop-blur-md rounded-2xl p-4 md:p-6 border border-gray-800 mt-4 flex flex-col md:flex-row items-start md:items-center justify-between shadow-lg gap-4">
-            <div class="flex items-center gap-4">
-                <img id="avatar-modelo" src="" class="w-16 h-16 rounded-full object-cover border-2 border-pink-500 bg-gray-800">
+        <div class="bg-[#16121d]/90 backdrop-blur-xl rounded-3xl p-6 border border-gray-800 mt-6 flex flex-col md:flex-row items-start md:items-center justify-between shadow-2xl gap-6">
+            <div class="flex items-center gap-6">
+                <img id="avatar-modelo" src="" class="w-20 h-20 rounded-full object-cover border-4 border-[#FF0055] bg-gray-800 shadow-[0_0_15px_rgba(255,0,85,0.5)]">
                 <div>
-                    <h2 id="nombre-modelo" class="text-2xl font-bold">...</h2>
-                    <p id="subject-modelo" class="text-sm text-gray-400">...</p>
+                    <h2 id="nombre-modelo" class="text-3xl font-black text-white tracking-wide">...</h2>
+                    <p id="subject-modelo" class="text-gray-400 text-sm mt-1">...</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3">
-                <!-- Botón que abre el perfil real en nueva pestaña -->
-                <button onclick="abrirPerfilReal()" class="bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2">
-                    <i class="fas fa-external-link-alt text-pink-500"></i> Ver Perfil Completo
+            <div class="flex items-center gap-4">
+                <button onclick="abrirPerfilReal()" class="bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 px-6 py-3 rounded-full text-sm font-bold transition flex items-center gap-2">
+                    <i class="fas fa-user-circle text-[#FF0055] text-lg"></i> VER PERFIL
                 </button>
-                <span class="bg-gray-800 text-gray-300 text-xs px-3 py-1 rounded-full border border-gray-700 hidden md:inline">En vivo</span>
-                <span class="bg-pink-600 text-white text-xs px-3 py-1 rounded-full font-bold hidden md:inline">Top Model</span>
+                <span class="bg-[#FF0055]/20 text-[#FF0055] text-xs font-bold px-4 py-2 rounded-full border border-[#FF0055]/50 hidden md:inline">EN VIVO</span>
+                <span class="bg-gradient-to-r from-[#FF0055] to-[#9D00FF] text-white text-xs font-bold px-4 py-2 rounded-full hidden md:inline shadow-[0_0_10px_rgba(255,0,85,0.4)]">TOP MODEL</span>
             </div>
         </div>
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-[#0b0910] border-t border-gray-800 mt-12 py-10 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+    <footer class="bg-[#0B0910] border-t border-gray-800/50 mt-16 py-12 relative z-10">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
                 <div>
-                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras por edad</h4>
-                    <ul class="space-y-2 text-sm text-gray-300">
-                        <li><a href="#" onclick="irAInicioParaFiltrar('f'); return false;" class="hover:text-pink-400 transition">Cámaras de mujeres</a></li>
-                        <li><a href="#" onclick="irAInicioParaFiltrar('m'); return false;" class="hover:text-pink-400 transition">Cámaras de hombres</a></li>
-                        <li><a href="#" onclick="irAInicioParaFiltrar('c'); return false;" class="hover:text-pink-400 transition">Cámaras de parejas</a></li>
-                        <li><a href="#" onclick="irAInicioParaFiltrar('t'); return false;" class="hover:text-pink-400 transition">Cámaras de trans</a></li>
+                    <h4 class="text-[#FF0055] font-black text-xs mb-5 uppercase tracking-widest">Cámaras por edad</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="#" onclick="irAInicioParaFiltrar('f'); return false;" class="hover:text-white transition">Cámaras de mujeres</a></li>
+                        <li><a href="#" onclick="irAInicioParaFiltrar('m'); return false;" class="hover:text-white transition">Cámaras de hombres</a></li>
+                        <li><a href="#" onclick="irAInicioParaFiltrar('c'); return false;" class="hover:text-white transition">Cámaras de parejas</a></li>
+                        <li><a href="#" onclick="irAInicioParaFiltrar('t'); return false;" class="hover:text-white transition">Cámaras de trans</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras por región</h4>
-                    <ul class="space-y-2 text-sm text-gray-300">
-                        <li><a href="#" onclick="irAInicioParaRegion('norteamerica'); return false;" class="hover:text-pink-400 transition">Cámaras en Norteamérica</a></li>
-                        <li><a href="#" onclick="irAInicioParaRegion('europa'); return false;" class="hover:text-pink-400 transition">Cámaras en Europa</a></li>
-                        <li><a href="#" onclick="irAInicioParaRegion('sudamerica'); return false;" class="hover:text-pink-400 transition">Cámaras en Sudamérica</a></li>
-                        <li><a href="#" onclick="irAInicioParaRegion('asia'); return false;" class="hover:text-pink-400 transition">Cámaras en Asia</a></li>
+                    <h4 class="text-[#FF0055] font-black text-xs mb-5 uppercase tracking-widest">Cámaras por región</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="#" onclick="irAInicioParaRegion('norteamerica'); return false;" class="hover:text-white transition">Norteamérica</a></li>
+                        <li><a href="#" onclick="irAInicioParaRegion('europa'); return false;" class="hover:text-white transition">Europa</a></li>
+                        <li><a href="#" onclick="irAInicioParaRegion('sudamerica'); return false;" class="hover:text-white transition">Sudamérica</a></li>
+                        <li><a href="#" onclick="irAInicioParaRegion('asia'); return false;" class="hover:text-white transition">Asia</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Shows privados</h4>
-                    <ul class="space-y-2 text-sm text-gray-300">
-                        <li><a href="#" class="hover:text-pink-400 transition">6 tokens por minuto</a></li>
-                        <li><a href="#" class="hover:text-pink-400 transition">12-18 tokens por minuto</a></li>
-                        <li><a href="#" class="hover:text-pink-400 transition">30-42 tokens por minuto</a></li>
-                        <li><a href="#" class="hover:text-pink-400 transition">+90 tokens por minuto</a></li>
+                    <h4 class="text-[#FF0055] font-black text-xs mb-5 uppercase tracking-widest">Shows privados</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="#" class="hover:text-white transition">6 tokens / min</a></li>
+                        <li><a href="#" class="hover:text-white transition">12-18 tokens / min</a></li>
+                        <li><a href="#" class="hover:text-white transition">30-42 tokens / min</a></li>
+                        <li><a href="#" class="hover:text-white transition">+90 tokens / min</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Por estado</h4>
-                    <ul class="space-y-2 text-sm text-gray-300">
-                        <li><a href="#" class="hover:text-pink-400 transition">Shows privados</a></li>
-                        <li><a href="#" class="hover:text-pink-400 transition">Cámaras nuevas</a></li>
-                        <li><a href="#" class="hover:text-pink-400 transition">Cámaras de videojuegos</a></li>
+                    <h4 class="text-[#FF0055] font-black text-xs mb-5 uppercase tracking-widest">Por estado</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="#" class="hover:text-white transition">Shows privados</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras nuevas</a></li>
+                        <li><a href="#" class="hover:text-white transition">Videojuegos</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Destacadas</h4>
-                    <ul class="space-y-2 text-sm text-gray-300">
-                        <li><a href="#" onclick="irAInicio(); return false;" class="hover:text-pink-400 transition">Inicio</a></li>
-                        <li><a href="#" class="hover:text-pink-400 transition">Cámaras destacadas</a></li>
-                        <li><a href="#" class="hover:text-pink-400 transition">Cámaras nuevas</a></li>
+                    <h4 class="text-[#FF0055] font-black text-xs mb-5 uppercase tracking-widest">Destacadas</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="#" onclick="irAInicio(); return false;" class="hover:text-white transition">Inicio</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras destacadas</a></li>
+                        <li><a href="#" class="hover:text-white transition">Cámaras nuevas</a></li>
                     </ul>
                 </div>
             </div>
             
-            <div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-gray-400">
-                    <a href="#" class="hover:text-white transition">Seguridad y consentimiento</a>
-                    <span class="text-gray-700">|</span>
-                    <a href="#" class="hover:text-white transition">Términos y condiciones</a>
-                    <span class="text-gray-700">|</span>
-                    <a href="#" class="hover:text-white transition">Política de privacidad</a>
-                    <span class="text-gray-700">|</span>
+            <div class="border-t border-gray-800/50 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <a href="#" class="hover:text-white transition">Seguridad</a>
+                    <a href="#" class="hover:text-white transition">Términos</a>
+                    <a href="#" class="hover:text-white transition">Privacidad</a>
                     <a href="#" class="hover:text-white transition">Ayuda</a>
-                    <span class="text-gray-700">|</span>
-                    <a href="#" class="hover:text-white transition">Pautas de la comunidad</a>
+                    <a href="#" class="hover:text-white transition">DMCA</a>
                 </div>
-                <div class="text-xs text-gray-500">
-                    &copy; 2026 Mi Marca. Todos los derechos reservados.
+                <div class="text-xs text-gray-600 font-medium">
+                    &copy; 2026 NEXUS CAM. Todos los derechos reservados.
                 </div>
             </div>
         </div>
@@ -296,18 +322,18 @@
                 const bandera = m.country ? `<span class="fi fi-${m.country.toLowerCase()}"></span>` : '';
                 html += `
                     <div onclick="irADetalle('${m.username}')" class="relative w-72 h-44 shrink-0 group cursor-pointer">
-                        <div class="absolute inset-0 rounded-xl overflow-hidden border border-gray-800 group-hover:border-pink-500 transition-all bg-gray-900">
+                        <div class="absolute inset-0 rounded-2xl overflow-hidden border border-gray-800 group-hover:border-[#FF0055] transition-all bg-gray-900">
                             <img src="${m.image_url_360x270}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10"></div>
-                            <div class="absolute top-2 right-2 bg-black/60 px-2 py-1 rounded-md text-xs font-bold text-green-400 flex items-center gap-1 z-20">
+                            <div class="absolute top-3 right-3 bg-black/70 px-2.5 py-1 rounded-md text-xs font-bold text-green-400 flex items-center gap-1.5 z-20 backdrop-blur-sm">
                                 <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> ${m.num_users}
                             </div>
-                            <div class="absolute bottom-3 left-24 right-3 z-20">
-                                <h3 class="text-white font-bold text-lg truncate flex items-center gap-2">${bandera} ${m.username}</h3>
-                                <p class="text-gray-300 text-xs truncate">${subject}</p>
+                            <div class="absolute bottom-4 left-28 right-4 z-20">
+                                <h3 class="text-white font-black text-lg truncate flex items-center gap-2">${bandera} ${m.username}</h3>
+                                <p class="text-gray-400 text-xs truncate mt-1">${subject}</p>
                             </div>
                         </div>
-                        <span class="absolute -bottom-2 left-2 text-8xl font-black ${claseNeon} z-30 pointer-events-none drop-shadow-2xl">${i + 1}</span>
+                        <span class="absolute -bottom-4 left-2 text-8xl font-black ${claseNeon} z-30 pointer-events-none drop-shadow-2xl opacity-80">${i + 1}</span>
                     </div>
                 `;
             });
@@ -359,7 +385,7 @@
             document.getElementById('hero-desc').innerText = modelo.room_subject ? modelo.room_subject.replace(/<[^>]*>?/gm, '') : '';
             
             document.getElementById('hero-miniaturas').innerHTML = topHero.map((m, i) => `
-                <div class="w-12 h-16 rounded-md overflow-hidden border-2 ${i === indiceHero % topHero.length ? 'border-pink-500 opacity-100' : 'border-transparent opacity-60 hover:opacity-100'} transition cursor-pointer" onclick="cambiarHero(${i})">
+                <div class="w-14 h-20 rounded-lg overflow-hidden border-2 ${i === indiceHero % topHero.length ? 'border-[#FF0055] opacity-100' : 'border-transparent opacity-50 hover:opacity-100'} transition cursor-pointer" onclick="cambiarHero(${i})">
                     <img src="${m.image_url_360x270}" class="w-full h-full object-cover">
                 </div>
             `).join('');
@@ -377,9 +403,9 @@
             generoActual = genero;
             document.querySelectorAll('.filtro-btn').forEach(btn => {
                 if (btn.dataset.filter === genero) {
-                    btn.className = "filtro-btn bg-pink-600 text-white px-4 py-1.5 text-sm rounded-full font-semibold transition";
+                    btn.className = "filtro-btn bg-[#FF0055] text-white px-5 py-2 text-xs font-bold rounded-full transition shadow-[0_0_10px_rgba(255,0,85,0.4)]";
                 } else {
-                    btn.className = "filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700";
+                    btn.className = "filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-5 py-2 text-xs font-bold rounded-full transition border border-gray-700";
                 }
             });
             aplicarFiltros();
@@ -452,15 +478,15 @@
                 const htmlNuevasTarjetas = filtrados.map(m => {
                     const bandera = m.country ? `<span class="fi fi-${m.country.toLowerCase()}"></span>` : '';
                     return `
-                        <div onclick="irADetalle('${m.username}')" class="card-poster group cursor-pointer border border-gray-800 bg-gray-900 relative">
+                        <div onclick="irADetalle('${m.username}')" class="card-poster group cursor-pointer border border-gray-800 bg-[#16121d] relative rounded-2xl overflow-hidden shadow-lg hover:shadow-[0_0_20px_rgba(255,0,85,0.3)]">
                             <img src="${m.image_url_360x270}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#16121d] via-[#16121d]/40 to-transparent z-10"></div>
-                            <div class="absolute top-1 right-1 bg-black/70 px-1.5 py-0.5 rounded text-[10px] font-bold text-green-400 z-20 flex items-center gap-1">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#0B0910] via-[#0B0910]/40 to-transparent z-10"></div>
+                            <div class="absolute top-2 right-2 bg-black/80 px-2 py-1 rounded text-[10px] font-bold text-green-400 z-20 flex items-center gap-1 backdrop-blur-sm">
                                 <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> ${m.num_users}
                             </div>
-                            <div class="absolute bottom-2 left-2 right-2 z-20">
-                                <h3 class="text-white font-bold text-xs truncate flex items-center gap-1">${bandera} ${m.username}</h3>
-                                <p class="text-gray-400 text-[10px] truncate">${m.room_subject}</p>
+                            <div class="absolute bottom-3 left-3 right-3 z-20">
+                                <h3 class="text-white font-black text-sm truncate flex items-center gap-1.5">${bandera} ${m.username}</h3>
+                                <p class="text-gray-400 text-xs truncate mt-1">${m.room_subject}</p>
                             </div>
                         </div>
                     `;
@@ -471,8 +497,8 @@
                 if (hayMasResultados) {
                     btnMas.classList.remove('hidden');
                     btnMas.innerHTML = `
-                        <button onclick="cargarMas()" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-full transition border border-gray-600">
-                            <i class="fas fa-plus-circle mr-2"></i> Cargar más salas
+                        <button onclick="cargarMas()" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-full transition border border-gray-600 hover:border-[#FF0055]">
+                            <i class="fas fa-plus-circle mr-2 text-[#FF0055]"></i> CARGAR MÁS
                         </button>
                     `;
                 } else {
@@ -509,7 +535,6 @@
         function abrirPerfilReal() {
             if (!usuarioActualDetalle) return;
             // Abre la página real del perfil de Chaturbate en una nueva pestaña.
-            // El usuario no pierde tu web, solo se abre una pestaña adicional con el perfil completo.
             const urlPerfil = `https://chaturbate.com/${usuarioActualDetalle}/?campaign=${MI_WM}`;
             window.open(urlPerfil, '_blank');
         }
