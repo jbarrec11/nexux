@@ -29,8 +29,19 @@
         #top10Container { scroll-snap-type: none; }
         .fi { display: inline-block; width: 1.2em; height: 0.9em; background-size: contain; background-position: 50%; background-repeat: no-repeat; vertical-align: middle; border-radius: 2px; }
         
-        /* Arreglo para que el texto del Hero no se vea borroso */
-        .hero-glass { background: rgba(26, 26, 31, 0.85); backdrop-filter: blur(10px); }
+        /* Estilos para el Select de Países (Diseño oscuro) */
+        select#filtro-pais {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: transparent;
+            color: #e5e7eb;
+            padding-right: 1.5rem;
+        }
+        select#filtro-pais option {
+            background-color: #1f2937; /* Fondo oscuro para el menú */
+            color: #f4f1ff;
+        }
     </style>
 </head>
 <body class="bg-[#16121d] text-[#f4f1ff] font-sans min-h-screen relative flex flex-col">
@@ -46,10 +57,10 @@
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <h1 onclick="irAInicio()" class="text-pink-500 font-black text-2xl tracking-widest cursor-pointer hover:text-pink-400 transition">MI MARCA</h1>
             <nav class="hidden md:flex gap-6 text-sm font-semibold text-gray-400">
-                <a href="#" onclick="irAInicio()" class="hover:text-white transition" id="nav-inicio">Inicio</a>
-                <a href="#" class="hover:text-white transition" id="nav-categorias">Categorías</a>
+                <a href="#" onclick="irAInicio()" class="hover:text-white transition">Inicio</a>
+                <a href="#" class="hover:text-white transition">Categorías</a>
             </nav>
-            <button class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow-lg shadow-pink-600/30" id="btn-ingresar">Ingresar</button>
+            <button class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow-lg shadow-pink-600/30">Ingresar</button>
         </div>
     </header>
 
@@ -58,17 +69,17 @@
         
         <!-- HERO -->
         <section class="mb-10">
-            <div class="hero-glass rounded-2xl overflow-hidden flex flex-col md:flex-row border border-gray-700/50 relative h-[300px] shadow-2xl">
+            <div class="bg-[#1a1a1f]/80 backdrop-blur-md rounded-2xl overflow-hidden flex flex-col md:flex-row border border-gray-700/50 relative h-[300px] shadow-2xl">
                 <div class="w-full md:w-1/4 h-full relative bg-black">
                     <img id="hero-img" src="" class="w-full h-full object-cover transition-opacity duration-500 opacity-100" alt="Destacado">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent to-[#1a1a1f] hidden md:block"></div>
                 </div>
                 <div class="w-full md:w-3/4 p-6 md:p-10 flex flex-col justify-center relative z-10">
-                    <span class="text-pink-600 font-bold text-xs tracking-widest uppercase mb-1" id="lbl-destacados">Destacados</span>
+                    <span class="text-pink-600 font-bold text-xs tracking-widest uppercase mb-1">Destacados</span>
                     <h2 id="hero-titulo" class="text-2xl md:text-4xl font-black text-white mb-2 leading-tight">Cargando...</h2>
                     <p id="hero-desc" class="text-gray-300 text-sm mb-4 line-clamp-2">...</p>
                     <div>
-                        <button onclick="irADetalle(document.getElementById('hero-titulo').innerText)" class="bg-white text-black font-bold py-2 px-6 rounded-lg hover:bg-gray-200 transition shadow-lg text-sm" id="btn-ver-vivo">Ver en Vivo</button>
+                        <button onclick="irADetalle(document.getElementById('hero-titulo').innerText)" class="bg-white text-black font-bold py-2 px-6 rounded-lg hover:bg-gray-200 transition shadow-lg text-sm">Ver en Vivo</button>
                     </div>
                 </div>
                 <div id="hero-miniaturas" class="absolute bottom-3 right-4 hidden lg:flex gap-2 z-20"></div>
@@ -78,7 +89,7 @@
         <!-- TOP 10 -->
         <section class="mb-10 relative">
             <div class="flex justify-between items-end mb-4 bg-[#16121d]/80 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
-                <h2 class="text-pink-500 font-black text-xl flex items-center gap-2 uppercase tracking-widest" id="lbl-top10">🏆 Top 10 Más Vistos</h2>
+                <h2 class="text-pink-500 font-black text-xl flex items-center gap-2 uppercase tracking-widest">🏆 Top 10 Más Vistos</h2>
             </div>
             <div id="top10Container" class="overflow-x-auto pt-4 pb-8 no-scrollbar w-full">
                 <div id="carrusel-top" class="flex gap-4 w-max"></div>
@@ -88,21 +99,22 @@
         <!-- FILTROS Y GRID -->
         <section class="mb-12">
             <div class="flex justify-between items-center mb-4 bg-[#16121d]/80 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
-                <h2 class="text-white font-bold text-xl flex items-center gap-2" id="lbl-explorar">Explorar</h2>
+                <h2 class="text-white font-bold text-xl flex items-center gap-2">Explorar</h2>
             </div>
             
             <div class="flex flex-wrap items-center gap-4 mb-6">
                 <div class="flex flex-wrap gap-2">
-                    <button onclick="filtrar('all')" class="filtro-btn bg-pink-600 text-white px-4 py-1.5 text-sm rounded-full font-semibold transition" data-filter="all" id="filtro-todos">Todos</button>
-                    <button onclick="filtrar('f')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="f" id="filtro-mujeres">Mujeres</button>
-                    <button onclick="filtrar('m')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="m" id="filtro-hombres">Hombres</button>
-                    <button onclick="filtrar('c')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="c" id="filtro-parejas">Parejas</button>
-                    <button onclick="filtrar('t')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="t" id="filtro-trans">Trans</button>
+                    <button onclick="filtrar('all')" class="filtro-btn bg-pink-600 text-white px-4 py-1.5 text-sm rounded-full font-semibold transition" data-filter="all">Todos</button>
+                    <button onclick="filtrar('f')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="f">Mujeres</button>
+                    <button onclick="filtrar('m')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="m">Hombres</button>
+                    <button onclick="filtrar('c')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="c">Parejas</button>
+                    <button onclick="filtrar('t')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="t">Trans</button>
                 </div>
                 
-                <div class="flex items-center gap-2 bg-gray-800/80 rounded-full px-4 py-1 border border-gray-700">
+                <!-- Selector de País Mejorado -->
+                <div class="relative flex items-center gap-2 bg-gray-800/80 rounded-full px-4 py-1 border border-gray-700 hover:border-pink-500 transition-colors">
                     <i class="fas fa-globe text-pink-500 text-sm"></i>
-                    <select id="filtro-pais" onchange="aplicarFiltros()" class="bg-transparent text-gray-300 text-sm font-semibold outline-none cursor-pointer">
+                    <select id="filtro-pais" onchange="aplicarFiltros()" class="bg-transparent text-gray-200 text-sm font-semibold outline-none cursor-pointer w-40">
                         <option value="">Todos los países</option>
                         <option value="CO">🇨🇴 Colombia</option>
                         <option value="US">🇺🇸 Estados Unidos</option>
@@ -119,6 +131,7 @@
                         <option value="IT">🇮🇹 Italia</option>
                         <option value="GB">🇬🇧 Reino Unido</option>
                     </select>
+                    <i class="fas fa-chevron-down text-gray-400 text-xs pointer-events-none absolute right-3"></i>
                 </div>
             </div>
             
@@ -129,7 +142,7 @@
     <!-- VISTA 2: DETALLE -->
     <main id="vista-detalle" class="max-w-7xl mx-auto p-4 md:p-8 hidden relative z-10 flex-grow w-full">
         <div class="flex justify-between items-center mb-4">
-            <button onclick="irAInicio()" class="text-gray-400 hover:text-white flex items-center gap-2 text-sm font-bold transition bg-[#16121d]/80 px-4 py-2 rounded-lg w-fit" id="btn-volver">
+            <button onclick="irAInicio()" class="text-gray-400 hover:text-white flex items-center gap-2 text-sm font-bold transition bg-[#16121d]/80 px-4 py-2 rounded-lg w-fit">
                 <i class="fas fa-arrow-left"></i> Volver al inicio
             </button>
             <div class="flex items-center gap-3">
@@ -162,56 +175,52 @@
         </div>
     </main>
 
-    <!-- FOOTER COMPLETO -->
+    <!-- FOOTER COMPLETO Y FUNCIONAL -->
     <footer class="bg-[#0f0c15] border-t border-gray-800 mt-12 py-10 relative z-10">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-8">
                 <div>
-                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras gratuitas por edad</h4>
+                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras por edad</h4>
                     <ul class="space-y-2 text-xs text-gray-400">
-                        <li><a href="#" class="hover:text-white transition">Cámaras de jóvenes (más de 18 años)</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras de 18 a 21 años</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras de 20 a 30 años</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras de 30 a 50 años</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras de maduras (más de 50 años)</a></li>
+                        <li><a href="#" onclick="filtrarPorTag('18-21'); return false;" class="hover:text-pink-400 transition">Cámaras de 18 a 21 años</a></li>
+                        <li><a href="#" onclick="filtrarPorTag('20-30'); return false;" class="hover:text-pink-400 transition">Cámaras de 20 a 30 años</a></li>
+                        <li><a href="#" onclick="filtrarPorTag('30-50'); return false;" class="hover:text-pink-400 transition">Cámaras de 30 a 50 años</a></li>
+                        <li><a href="#" onclick="filtrarPorTag('mature'); return false;" class="hover:text-pink-400 transition">Cámaras de maduras (más de 50 años)</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras gratuitas por región</h4>
+                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras por región</h4>
                     <ul class="space-y-2 text-xs text-gray-400">
-                        <li><a href="#" class="hover:text-white transition">Cámaras en Norteamérica</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras en otras regiones</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras en Europa y Rusia</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras en Asia</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras en Sudamérica</a></li>
+                        <li><a href="#" onclick="filtrarPorPais('US'); return false;" class="hover:text-pink-400 transition">Cámaras en Norteamérica</a></li>
+                        <li><a href="#" onclick="filtrarPorPais('ES'); return false;" class="hover:text-pink-400 transition">Cámaras en Europa</a></li>
+                        <li><a href="#" onclick="filtrarPorPais('RU'); return false;" class="hover:text-pink-400 transition">Cámaras en Rusia</a></li>
+                        <li><a href="#" onclick="filtrarPorPais('CO'); return false;" class="hover:text-pink-400 transition">Cámaras en Sudamérica</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Shows privados disponibles</h4>
+                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Shows privados</h4>
                     <ul class="space-y-2 text-xs text-gray-400">
-                        <li><a href="#" class="hover:text-white transition">6 tokens por minuto</a></li>
-                        <li><a href="#" class="hover:text-white transition">12-18 tokens por minuto</a></li>
-                        <li><a href="#" class="hover:text-white transition">30-42 tokens por minuto</a></li>
-                        <li><a href="#" class="hover:text-white transition">60-72 tokens por minuto</a></li>
-                        <li><a href="#" class="hover:text-white transition">+90 tokens por minuto</a></li>
+                        <li><a href="#" class="hover:text-pink-400 transition">6 tokens por minuto</a></li>
+                        <li><a href="#" class="hover:text-pink-400 transition">12-18 tokens por minuto</a></li>
+                        <li><a href="#" class="hover:text-pink-400 transition">30-42 tokens por minuto</a></li>
+                        <li><a href="#" class="hover:text-pink-400 transition">+90 tokens por minuto</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras gratuitas por estado</h4>
+                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Por estado</h4>
                     <ul class="space-y-2 text-xs text-gray-400">
-                        <li><a href="#" class="hover:text-white transition">Shows privados</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras nuevas</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras de videojuegos</a></li>
+                        <li><a href="#" class="hover:text-pink-400 transition">Shows privados</a></li>
+                        <li><a href="#" class="hover:text-pink-400 transition">Cámaras nuevas</a></li>
+                        <li><a href="#" class="hover:text-pink-400 transition">Cámaras de videojuegos</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras gratuitas</h4>
+                    <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras gratis</h4>
                     <ul class="space-y-2 text-xs text-gray-400">
-                        <li><a href="#" class="hover:text-white transition">Cámaras destacadas</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras de mujeres</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras de hombres</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras de parejas</a></li>
-                        <li><a href="#" class="hover:text-white transition">Cámaras de trans</a></li>
+                        <li><a href="#" onclick="filtrar('f'); return false;" class="hover:text-pink-400 transition">Cámaras de mujeres</a></li>
+                        <li><a href="#" onclick="filtrar('m'); return false;" class="hover:text-pink-400 transition">Cámaras de hombres</a></li>
+                        <li><a href="#" onclick="filtrar('c'); return false;" class="hover:text-pink-400 transition">Cámaras de parejas</a></li>
+                        <li><a href="#" onclick="filtrar('t'); return false;" class="hover:text-pink-400 transition">Cámaras de trans</a></li>
                     </ul>
                 </div>
             </div>
@@ -228,11 +237,7 @@
                     <span class="text-gray-700">|</span>
                     <a href="#" class="hover:text-white transition">Pautas de la comunidad</a>
                     <span class="text-gray-700">|</span>
-                    <a href="#" class="hover:text-white transition">DMCA / Eliminar contenido</a>
-                    <span class="text-gray-700">|</span>
-                    <a href="#" class="hover:text-white transition">Opiniones</a>
-                    <span class="text-gray-700">|</span>
-                    <a href="#" class="hover:text-white transition">Centro de seguridad</a>
+                    <a href="#" class="hover:text-white transition">DMCA</a>
                 </div>
                 <div class="text-xs text-gray-600">
                     &copy; 2026 Mi Marca. Todos los derechos reservados.
@@ -258,13 +263,7 @@
             'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80',
             'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',
             'https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?w=400&q=80',
-            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80',
-            'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&q=80',
-            'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=400&q=80',
-            'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80',
-            'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&q=80',
-            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
-            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80'
+            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80'
         ];
 
         function generarFondoMosaico() {
@@ -398,6 +397,17 @@
                 }
             });
             aplicarFiltros();
+        }
+
+        function filtrarPorPais(codigoPais) {
+            document.getElementById('filtro-pais').value = codigoPais;
+            aplicarFiltros();
+        }
+
+        function filtrarPorTag(tag) {
+            // Simulación rápida de búsqueda por tag
+            alert("Buscando cámaras con la etiqueta: " + tag);
+            // Aquí podrías hacer un fetch a tu proxy con &tag=tag
         }
 
         async function aplicarFiltros() {
