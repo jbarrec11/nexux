@@ -35,13 +35,11 @@
 </head>
 <body class="bg-[#16121d] text-[#f4f1ff] font-sans min-h-screen relative flex flex-col">
 
-    <!-- FONDO MOSAICO -->
     <div id="bgMosaic">
         <div class="mosaic-grid" id="mosaicGrid"></div>
         <div class="mosaic-fade"></div>
     </div>
 
-    <!-- HEADER -->
     <header class="border-b border-gray-800 bg-[#16121d]/95 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <h1 onclick="irAInicio()" class="text-pink-500 font-black text-2xl tracking-widest cursor-pointer hover:text-pink-400 transition">MI MARCA</h1>
@@ -55,8 +53,6 @@
 
     <!-- VISTA 1: INICIO -->
     <main id="vista-inicio" class="max-w-7xl mx-auto p-4 md:p-8 relative z-10 flex-grow w-full">
-        
-        <!-- HERO -->
         <section class="mb-10">
             <div class="bg-[#1a1a1f]/90 backdrop-blur-md rounded-2xl overflow-hidden flex flex-col md:flex-row border border-gray-700/50 relative h-[300px] shadow-2xl">
                 <div class="w-full md:w-1/4 h-full relative bg-black">
@@ -75,7 +71,6 @@
             </div>
         </section>
 
-        <!-- TOP 10 -->
         <section class="mb-10 relative">
             <div class="flex justify-between items-end mb-4 bg-[#16121d]/90 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
                 <h2 class="text-pink-500 font-black text-xl flex items-center gap-2 uppercase tracking-widest">🏆 Top 10 Más Vistos</h2>
@@ -85,7 +80,6 @@
             </div>
         </section>
 
-        <!-- FILTROS Y GRID -->
         <section class="mb-12">
             <div class="flex justify-between items-center mb-4 bg-[#16121d]/90 backdrop-blur-md p-3 rounded-xl border border-gray-800/50">
                 <h2 class="text-white font-bold text-xl flex items-center gap-2">Explorar</h2>
@@ -123,7 +117,6 @@
             
             <div id="grid-filtros" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 md:gap-3"></div>
             
-            <!-- Botón Cargar Más -->
             <div id="contenedor-cargar-mas" class="w-full flex justify-center mt-6 hidden">
                 <button onclick="cargarMas()" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-full transition border border-gray-600">
                     <i class="fas fa-plus-circle mr-2"></i> Cargar más salas
@@ -144,6 +137,7 @@
             </div>
         </div>
 
+        <!-- Reproductor Principal -->
         <div class="relative w-full rounded-2xl overflow-hidden bg-black border border-gray-800 shadow-2xl" style="aspect-ratio: 16 / 9;">
             <div id="contenedor-video" class="absolute inset-0 flex items-center justify-center text-gray-500">
                 <div class="text-center">
@@ -153,6 +147,7 @@
             </div>
         </div>
         
+        <!-- Información de la modelo -->
         <div class="bg-[#1a1a1f]/90 backdrop-blur-md rounded-2xl p-4 md:p-6 border border-gray-800 mt-4 flex flex-col md:flex-row items-start md:items-center justify-between shadow-lg gap-4">
             <div class="flex items-center gap-4">
                 <img id="avatar-modelo" src="" class="w-16 h-16 rounded-full object-cover border-2 border-pink-500 bg-gray-800">
@@ -166,16 +161,27 @@
                 <span class="bg-pink-600 text-white text-xs px-3 py-1 rounded-full font-bold">Top Model</span>
             </div>
         </div>
+
+        <!-- NUEVO: Iframe de Biografía / Perfil de la Modelo -->
+        <div class="mt-6 bg-[#1a1a1f]/90 backdrop-blur-md rounded-2xl border border-gray-800 shadow-xl overflow-hidden">
+            <div class="p-4 border-b border-gray-800 bg-[#16121d]/90 flex items-center gap-2">
+                <i class="fas fa-user-circle text-pink-500"></i>
+                <h3 class="font-bold text-white">Perfil y Biografía</h3>
+            </div>
+            <div id="contenedor-perfil" class="w-full h-[400px] relative bg-white">
+                <div class="absolute inset-0 flex items-center justify-center text-gray-400 bg-gray-900">
+                    <i class="fas fa-spinner fa-spin mr-2"></i> Cargando perfil...
+                </div>
+            </div>
+        </div>
     </main>
 
-    <!-- FOOTER -->
     <footer class="bg-[#0b0910] border-t border-gray-800 mt-12 py-10 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-8">
                 <div>
                     <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras por edad</h4>
                     <ul class="space-y-2 text-sm text-gray-300">
-                        <!-- Forzamos irAInicioParaFiltrar para que si está en detalle, vuelva al inicio -->
                         <li><a href="#" onclick="irAInicioParaFiltrar('f'); return false;" class="hover:text-pink-400 transition">Cámaras de mujeres</a></li>
                         <li><a href="#" onclick="irAInicioParaFiltrar('m'); return false;" class="hover:text-pink-400 transition">Cámaras de hombres</a></li>
                         <li><a href="#" onclick="irAInicioParaFiltrar('c'); return false;" class="hover:text-pink-400 transition">Cámaras de parejas</a></li>
@@ -247,7 +253,6 @@
         let isTop10Hovered = false;
         let generoActual = 'all';
         
-        // Variables de Paginación
         let paginaActual = 0;
         const limitePorPagina = 30;
         let hayMasResultados = true;
@@ -271,11 +276,9 @@
             grid.innerHTML = html;
         }
 
-        // Carga Inicial
         async function cargarDatos() {
             generarFondoMosaico();
             try {
-                // Carga el Top 10 (Pedimos 10, pero traemos 50 para tener de donde sacar el hero)
                 const res = await fetch(`/api/proxy?wm=${MI_WM}&limit=50`);
                 const json = await res.json();
                 modelosGlobales = json.results || [];
@@ -284,8 +287,6 @@
                 renderizarTop10();
                 configurarHero();
                 iniciarMarquesinaFluida();
-                
-                // Carga inicial del grid
                 aplicarFiltros(); 
             } catch (error) {
                 console.error("Error al cargar datos:", error);
@@ -392,24 +393,22 @@
             aplicarFiltros();
         }
 
-        // === LÓGICA DEL FOOTER CORREGIDA ===
         function irAInicioParaFiltrar(genero) {
-            irAInicio(); // Vuelve a la vista principal
-            filtrar(genero); // Aplica el filtro
+            irAInicio(); 
+            filtrar(genero); 
             document.getElementById('grid-filtros').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function irAInicioParaRegion(region) {
-            irAInicio(); // Vuelve a la vista principal
+            irAInicio(); 
             document.getElementById('filtro-pais').value = `region:${region}`;
             aplicarFiltros();
             document.getElementById('grid-filtros').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // === LÓGICA DE FILTRO Y PAGINACIÓN ===
         async function aplicarFiltros() {
             paginaActual = 0;
-            document.getElementById('grid-filtros').innerHTML = ''; // Limpiar grid
+            document.getElementById('grid-filtros').innerHTML = ''; 
             await cargarPagina();
         }
 
@@ -422,7 +421,6 @@
             const grid = document.getElementById('grid-filtros');
             const btnMas = document.getElementById('contenedor-cargar-mas');
             
-            // Mostrar spinner solo si es la primera página
             if (paginaActual === 0) {
                 grid.innerHTML = '<p class="text-gray-400 col-span-full text-center py-4"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
             } else {
@@ -451,7 +449,7 @@
                 
                 hayMasResultados = json.hasMore;
 
-                if (paginaActual === 0) grid.innerHTML = ''; // Limpiar spinner
+                if (paginaActual === 0) grid.innerHTML = ''; 
 
                 if (filtrados.length === 0 && paginaActual === 0) {
                     grid.innerHTML = '<p class="text-gray-500 col-span-full text-center py-4">No hay modelos en esta categoría ahora mismo.</p>';
@@ -478,7 +476,6 @@
 
                 grid.innerHTML += htmlNuevasTarjetas;
 
-                // Mostrar u ocultar botón "Cargar más"
                 if (hayMasResultados) {
                     btnMas.classList.remove('hidden');
                     btnMas.innerHTML = `
@@ -510,14 +507,21 @@
             document.getElementById('avatar-modelo').src = modelo.image_url_360x270;
             document.getElementById('avatar-modelo-top').src = modelo.image_url_360x270;
 
+            // 1. Cargar Iframe del Video y Chat
             const urlVideo = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&disable_sound=0`;
             document.getElementById('contenedor-video').innerHTML = `<iframe src="${urlVideo}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
+
+            // 2. Cargar Iframe del Perfil / Biografía
+            // El parámetro para ver el perfil en el embed de Chaturbate suele ser 'tab=bio' o similar.
+            const urlPerfil = `https://chaturbate.com/embed/${modelo.username}/?campaign=${MI_WM}&tab=profile`;
+            document.getElementById('contenedor-perfil').innerHTML = `<iframe src="${urlPerfil}" class="absolute inset-0 w-full h-full border-none" allowfullscreen></iframe>`;
         }
 
         function irAInicio() {
             document.getElementById('vista-detalle').classList.add('hidden');
             document.getElementById('vista-inicio').classList.remove('hidden');
             document.getElementById('contenedor-video').innerHTML = '';
+            document.getElementById('contenedor-perfil').innerHTML = ''; // Limpiamos el perfil al salir
             window.scrollTo(0, 0);
         }
 
