@@ -26,7 +26,7 @@ export default async function handler(request, response) {
     let resultados = [];
 
     if (region) {
-      // MAPEO DE REGIONES A ETIQUETAS (TAGS) OFICIALES DE CHATURBATE
+      // MAPEO DE REGIONES A ETIQUETAS OFICIALES DE CHATURBATE
       const tagsPorRegion = {
         'asia': 'asian',
         'europa': 'european', 
@@ -37,19 +37,20 @@ export default async function handler(request, response) {
       const tagBuscado = tagsPorRegion[region];
       
       if (tagBuscado) {
-        // Usamos el parámetro 'tag' de la API
         resultados = await fetchChaturbate(`&tag=${tagBuscado}`);
       }
       
     } else if (country) {
-      // Si se pide un país específico, usamos el parámetro 'country'
       resultados = await fetchChaturbate(`&country=${country}`);
     } else {
-      // Sin filtros, traemos todo
       resultados = await fetchChaturbate();
     }
 
-    // Ordenar por usuarios (opcional, pero recomendado)
+    // FILTRO CLAVE: Solo mostrar salas que estén en show público
+    // Esto evita que el usuario entre a salas privadas o ausentes y vea un video en negro.
+    resultados = resultados.filter(model => model.current_show === 'public');
+
+    // Ordenar por usuarios (los más vistos primero)
     resultados.sort((a, b) => parseInt(b.num_users) - parseInt(a.num_users));
 
     // Aplicar paginación
