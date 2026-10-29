@@ -1,6 +1,13 @@
 export default async function handler(request, response) {
-  const { wm = 'q7k3D' } = request.query;
-  const apiUrl = `https://chaturbate.com/api/public/affiliates/onlinerooms/?format=json&wm=${wm}&limit=100&client_ip=request_ip`;
+  const { wm = 'q7k3D', gender } = request.query;
+  
+  // Construimos la URL base
+  let apiUrl = `https://chaturbate.com/api/public/affiliates/onlinerooms/?format=json&wm=${wm}&limit=100&client_ip=request_ip`;
+  
+  // Si el frontend envía un género válido, lo añadimos
+  if (gender && ['f', 'm', 'c', 't'].includes(gender)) {
+    apiUrl += `&gender=${gender}`;
+  }
 
   try {
     const res = await fetch(apiUrl, {
@@ -14,10 +21,8 @@ export default async function handler(request, response) {
     
     const data = await res.json();
     
-    // Permitir que tu web lea los datos
     response.setHeader('Access-Control-Allow-Origin', '*');
-    // Guardar en caché por 5 minutos para no saturar la API
-    response.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate'); 
+    response.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate');
     
     response.status(200).json(data);
   } catch (error) {
