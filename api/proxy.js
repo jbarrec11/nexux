@@ -21,16 +21,15 @@ export default async function handler(request, response) {
     let data = await res.json();
     let resultados = data.results || [];
 
-    // --- FILTRO POR PAÍS ESPECÍFICO (si se selecciona uno) ---
+    // FILTRO POR PAÍS ESPECÍFICO
     if (country) {
       resultados = resultados.filter(model => model.country === country);
     }
 
-    // --- FILTRO POR REGIÓN (agrupación manual de países) ---
+    // FILTRO POR REGIÓN (Agrupación manual de países)
     if (region) {
-      // Definimos los países que pertenecen a cada región (puedes ampliar esta lista)
       const paisesPorRegion = {
-        'europa': ['ES', 'FR', 'DE', 'IT', 'GB', 'RU', 'NL', 'PT', 'SE', 'NO', 'DK', 'FI', 'PL', 'RO', 'GR', 'CZ', 'HU', 'IE', 'AT', 'CH', 'BE'],
+        'europa': ['ES', 'FR', 'DE', 'IT', 'GB', 'RU', 'NL', 'PT', 'SE', 'NO', 'DK', 'FI', 'PL', 'RO', 'GR', 'CZ', 'HU', 'IE', 'AT', 'CH', 'BE', 'UA'],
         'sudamerica': ['CO', 'AR', 'CL', 'BR', 'VE', 'PE', 'EC', 'BO', 'PY', 'UY'],
         'norteamerica': ['US', 'CA', 'MX'],
         'asia': ['PH', 'TH', 'VN', 'ID', 'MY', 'JP', 'KR', 'IN', 'CN', 'TW', 'HK']
