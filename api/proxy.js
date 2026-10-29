@@ -1,7 +1,7 @@
 export default async function handler(request, response) {
   const { wm = 'q7k3D', gender, country, region, limit = 30, offset = 0 } = request.query;
   
-  // Pedimos a Chaturbate solo lo que necesitamos (o un poco más para filtrar)
+  // Pedimos a Chaturbate un límite alto para tener de donde filtrar
   let apiUrl = `https://chaturbate.com/api/public/affiliates/onlinerooms/?format=json&wm=${wm}&limit=500&client_ip=request_ip`;
   
   if (gender && ['f', 'm', 'c', 't'].includes(gender)) {
@@ -21,11 +21,12 @@ export default async function handler(request, response) {
     let data = await res.json();
     let resultados = data.results || [];
 
-    // Filtros
+    // Filtro por País
     if (country) {
       resultados = resultados.filter(model => model.country === country);
     }
 
+    // Filtro por Región (Agrupación manual)
     if (region) {
       const paisesPorRegion = {
         'europa': ['ES', 'FR', 'DE', 'IT', 'GB', 'RU', 'NL', 'PT', 'SE', 'NO', 'DK', 'FI', 'PL', 'RO', 'GR', 'CZ', 'HU', 'IE', 'AT', 'CH', 'BE', 'UA'],
