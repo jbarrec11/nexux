@@ -29,22 +29,8 @@
         #top10Container { scroll-snap-type: none; }
         .fi { display: inline-block; width: 1.2em; height: 0.9em; background-size: contain; background-position: 50%; background-repeat: no-repeat; vertical-align: middle; border-radius: 2px; }
 
-        /* Selector de país oscuro */
-        select#filtro-pais {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-color: transparent;
-            color: #f4f1ff;
-            border: none;
-            outline: none;
-            cursor: pointer;
-        }
-        select#filtro-pais option {
-            background-color: #1f2937;
-            color: #ffffff;
-            padding: 10px;
-        }
+        select#filtro-pais { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-color: transparent; color: #f4f1ff; border: none; outline: none; cursor: pointer; }
+        select#filtro-pais option { background-color: #1f2937; color: #ffffff; padding: 10px; }
     </style>
 </head>
 <body class="bg-[#16121d] text-[#f4f1ff] font-sans min-h-screen relative flex flex-col">
@@ -114,19 +100,14 @@
                     <button onclick="filtrar('t')" class="filtro-btn bg-gray-800/80 hover:bg-gray-700 text-gray-300 px-4 py-1.5 text-sm rounded-full font-semibold transition border border-gray-700" data-filter="t">Trans</button>
                 </div>
                 
-                <!-- Selector de Región / País -->
                 <div class="relative flex items-center gap-2 bg-gray-800/90 rounded-full px-4 py-1.5 border border-gray-600 hover:border-pink-500 transition-colors">
                     <i class="fas fa-globe text-pink-500 text-sm"></i>
                     <select id="filtro-pais" onchange="aplicarFiltros()" class="bg-transparent text-white text-sm font-semibold w-48">
                         <option value="">Todos los países</option>
-                        
-                        <!-- Regiones -->
                         <option value="region:europa">🌍 Europa</option>
                         <option value="region:sudamerica">🌎 Sudamérica</option>
                         <option value="region:norteamerica">🌎 Norteamérica</option>
                         <option value="region:asia">🌏 Asia</option>
-                        
-                        <!-- Países Específicos -->
                         <option value="country:CO">🇨🇴 Colombia</option>
                         <option value="country:ES">🇪🇸 España</option>
                         <option value="country:US">🇺🇸 Estados Unidos</option>
@@ -141,6 +122,13 @@
             </div>
             
             <div id="grid-filtros" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 md:gap-3"></div>
+            
+            <!-- Botón Cargar Más -->
+            <div id="contenedor-cargar-mas" class="w-full flex justify-center mt-6 hidden">
+                <button onclick="cargarMas()" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-full transition border border-gray-600">
+                    <i class="fas fa-plus-circle mr-2"></i> Cargar más salas
+                </button>
+            </div>
         </section>
     </main>
 
@@ -180,26 +168,27 @@
         </div>
     </main>
 
-    <!-- FOOTER FUNCIONAL -->
+    <!-- FOOTER -->
     <footer class="bg-[#0b0910] border-t border-gray-800 mt-12 py-10 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-8">
                 <div>
                     <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras por edad</h4>
                     <ul class="space-y-2 text-sm text-gray-300">
-                        <li><a href="#" onclick="filtrar('f'); return false;" class="hover:text-pink-400 transition">Cámaras de mujeres</a></li>
-                        <li><a href="#" onclick="filtrar('m'); return false;" class="hover:text-pink-400 transition">Cámaras de hombres</a></li>
-                        <li><a href="#" onclick="filtrar('c'); return false;" class="hover:text-pink-400 transition">Cámaras de parejas</a></li>
-                        <li><a href="#" onclick="filtrar('t'); return false;" class="hover:text-pink-400 transition">Cámaras de trans</a></li>
+                        <!-- Forzamos irAInicioParaFiltrar para que si está en detalle, vuelva al inicio -->
+                        <li><a href="#" onclick="irAInicioParaFiltrar('f'); return false;" class="hover:text-pink-400 transition">Cámaras de mujeres</a></li>
+                        <li><a href="#" onclick="irAInicioParaFiltrar('m'); return false;" class="hover:text-pink-400 transition">Cámaras de hombres</a></li>
+                        <li><a href="#" onclick="irAInicioParaFiltrar('c'); return false;" class="hover:text-pink-400 transition">Cámaras de parejas</a></li>
+                        <li><a href="#" onclick="irAInicioParaFiltrar('t'); return false;" class="hover:text-pink-400 transition">Cámaras de trans</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-pink-500 font-bold text-sm mb-4 uppercase tracking-wider">Cámaras por región</h4>
                     <ul class="space-y-2 text-sm text-gray-300">
-                        <li><a href="#" onclick="filtrarPorRegion('norteamerica'); return false;" class="hover:text-pink-400 transition">Cámaras en Norteamérica</a></li>
-                        <li><a href="#" onclick="filtrarPorRegion('europa'); return false;" class="hover:text-pink-400 transition">Cámaras en Europa</a></li>
-                        <li><a href="#" onclick="filtrarPorRegion('sudamerica'); return false;" class="hover:text-pink-400 transition">Cámaras en Sudamérica</a></li>
-                        <li><a href="#" onclick="filtrarPorRegion('asia'); return false;" class="hover:text-pink-400 transition">Cámaras en Asia</a></li>
+                        <li><a href="#" onclick="irAInicioParaRegion('norteamerica'); return false;" class="hover:text-pink-400 transition">Cámaras en Norteamérica</a></li>
+                        <li><a href="#" onclick="irAInicioParaRegion('europa'); return false;" class="hover:text-pink-400 transition">Cámaras en Europa</a></li>
+                        <li><a href="#" onclick="irAInicioParaRegion('sudamerica'); return false;" class="hover:text-pink-400 transition">Cámaras en Sudamérica</a></li>
+                        <li><a href="#" onclick="irAInicioParaRegion('asia'); return false;" class="hover:text-pink-400 transition">Cámaras en Asia</a></li>
                     </ul>
                 </div>
                 <div>
@@ -251,12 +240,17 @@
     <script>
         const MI_WM = 'q7k3D';
         
-        let modelosGlobales = [];
+        let modelosGlobales = []; 
         let indiceHero = 0;
         let intervaloHero;
         let top10Container;
         let isTop10Hovered = false;
         let generoActual = 'all';
+        
+        // Variables de Paginación
+        let paginaActual = 0;
+        const limitePorPagina = 30;
+        let hayMasResultados = true;
 
         const fotosFondo = [
             'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80',
@@ -277,25 +271,26 @@
             grid.innerHTML = html;
         }
 
+        // Carga Inicial
         async function cargarDatos() {
             generarFondoMosaico();
             try {
-                const res = await fetch(`/api/proxy?wm=${MI_WM}`);
+                // Carga el Top 10 (Pedimos 10, pero traemos 50 para tener de donde sacar el hero)
+                const res = await fetch(`/api/proxy?wm=${MI_WM}&limit=50`);
                 const json = await res.json();
                 modelosGlobales = json.results || [];
                 modelosGlobales.sort((a, b) => parseInt(b.num_users) - parseInt(a.num_users));
-                renderizarTodo();
+                
+                renderizarTop10();
+                configurarHero();
+                iniciarMarquesinaFluida();
+                
+                // Carga inicial del grid
+                aplicarFiltros(); 
             } catch (error) {
                 console.error("Error al cargar datos:", error);
                 document.getElementById('grid-filtros').innerHTML = '<p class="text-red-500 col-span-full text-center">Error de conexión. Revisa Vercel.</p>';
             }
-        }
-
-        function renderizarTodo() {
-            renderizarTop10();
-            aplicarFiltros(); 
-            configurarHero();
-            iniciarMarquesinaFluida();
         }
 
         function renderizarTop10() {
@@ -323,7 +318,6 @@
                     </div>
                 `;
             });
-
             document.getElementById('carrusel-top').innerHTML = html + html;
         }
 
@@ -336,9 +330,7 @@
                 if (!isTop10Hovered && !document.getElementById('vista-inicio').classList.contains('hidden')) {
                     top10Container.scrollLeft += scrollSpeed;
                     const maxScroll = top10Container.scrollWidth / 2;
-                    if (top10Container.scrollLeft >= maxScroll) {
-                        top10Container.scrollLeft = 0;
-                    }
+                    if (top10Container.scrollLeft >= maxScroll) top10Container.scrollLeft = 0;
                 }
                 requestAnimationFrame(autoScroll);
             }
@@ -400,45 +392,74 @@
             aplicarFiltros();
         }
 
-        function filtrarPorRegion(region) {
-            document.getElementById('filtro-pais').value = `region:${region}`;
-            aplicarFiltros();
-            document.getElementById('grid-filtros').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // === LÓGICA DEL FOOTER CORREGIDA ===
+        function irAInicioParaFiltrar(genero) {
+            irAInicio(); // Vuelve a la vista principal
+            filtrar(genero); // Aplica el filtro
+            document.getElementById('grid-filtros').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
+        function irAInicioParaRegion(region) {
+            irAInicio(); // Vuelve a la vista principal
+            document.getElementById('filtro-pais').value = `region:${region}`;
+            aplicarFiltros();
+            document.getElementById('grid-filtros').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // === LÓGICA DE FILTRO Y PAGINACIÓN ===
         async function aplicarFiltros() {
+            paginaActual = 0;
+            document.getElementById('grid-filtros').innerHTML = ''; // Limpiar grid
+            await cargarPagina();
+        }
+
+        async function cargarMas() {
+            paginaActual++;
+            await cargarPagina();
+        }
+
+        async function cargarPagina() {
+            const grid = document.getElementById('grid-filtros');
+            const btnMas = document.getElementById('contenedor-cargar-mas');
+            
+            // Mostrar spinner solo si es la primera página
+            if (paginaActual === 0) {
+                grid.innerHTML = '<p class="text-gray-400 col-span-full text-center py-4"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
+            } else {
+                btnMas.innerHTML = '<button class="bg-gray-800 text-white font-bold py-2 px-6 rounded-full"><i class="fas fa-spinner fa-spin mr-2"></i> Cargando...</button>';
+            }
+
             const genero = generoActual;
             const filtroSeleccionado = document.getElementById('filtro-pais').value;
-            const grid = document.getElementById('grid-filtros');
-            grid.innerHTML = '<p class="text-gray-400 col-span-full text-center py-4"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>';
+            const offset = paginaActual * limitePorPagina;
 
-            let queryParams = [];
+            let queryParams = [`limit=${limitePorPagina}`, `offset=${offset}`];
             if (genero !== 'all') queryParams.push(`gender=${genero}`);
             
-            // Lógica para enviar el parámetro correcto (region o country)
             if (filtroSeleccionado) {
                 const [tipo, valor] = filtroSeleccionado.split(':'); 
-                if (tipo === 'region') {
-                    queryParams.push(`region=${valor}`);
-                } else if (tipo === 'country') {
-                    queryParams.push(`country=${valor}`);
-                }
+                if (tipo === 'region') queryParams.push(`region=${valor}`);
+                else if (tipo === 'country') queryParams.push(`country=${valor}`);
             }
             
-            const queryString = queryParams.length > 0 ? '&' + queryParams.join('&') : '';
+            const queryString = '&' + queryParams.join('&');
 
             try {
                 const res = await fetch(`/api/proxy?wm=${MI_WM}${queryString}`);
                 const json = await res.json();
                 let filtrados = json.results || [];
-                filtrados.sort((a, b) => parseInt(b.num_users) - parseInt(a.num_users));
                 
-                if (filtrados.length === 0) {
+                hayMasResultados = json.hasMore;
+
+                if (paginaActual === 0) grid.innerHTML = ''; // Limpiar spinner
+
+                if (filtrados.length === 0 && paginaActual === 0) {
                     grid.innerHTML = '<p class="text-gray-500 col-span-full text-center py-4">No hay modelos en esta categoría ahora mismo.</p>';
+                    btnMas.classList.add('hidden');
                     return;
                 }
 
-                grid.innerHTML = filtrados.map(m => {
+                const htmlNuevasTarjetas = filtrados.map(m => {
                     const bandera = m.country ? `<span class="fi fi-${m.country.toLowerCase()}"></span>` : '';
                     return `
                         <div onclick="irADetalle('${m.username}')" class="card-poster group cursor-pointer border border-gray-800 bg-gray-900 relative">
@@ -454,6 +475,20 @@
                         </div>
                     `;
                 }).join('');
+
+                grid.innerHTML += htmlNuevasTarjetas;
+
+                // Mostrar u ocultar botón "Cargar más"
+                if (hayMasResultados) {
+                    btnMas.classList.remove('hidden');
+                    btnMas.innerHTML = `
+                        <button onclick="cargarMas()" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-full transition border border-gray-600">
+                            <i class="fas fa-plus-circle mr-2"></i> Cargar más salas
+                        </button>
+                    `;
+                } else {
+                    btnMas.classList.add('hidden');
+                }
 
             } catch (error) {
                 console.error("Error al filtrar:", error);
@@ -483,6 +518,7 @@
             document.getElementById('vista-detalle').classList.add('hidden');
             document.getElementById('vista-inicio').classList.remove('hidden');
             document.getElementById('contenedor-video').innerHTML = '';
+            window.scrollTo(0, 0);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
