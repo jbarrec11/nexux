@@ -1,7 +1,7 @@
 export default async function handler(request, response) {
-  const { wm = 'q7k3D', gender, country, region } = request.query;
+  const { wm = 'q7k3D', gender, country, region, limit = 30, offset = 0 } = request.query;
   
-  // Pedimos un límite alto para tener suficientes modelos de donde filtrar
+  // Pedimos a Chaturbate solo lo que necesitamos (o un poco más para filtrar)
   let apiUrl = `https://chaturbate.com/api/public/affiliates/onlinerooms/?format=json&wm=${wm}&limit=500&client_ip=request_ip`;
   
   if (gender && ['f', 'm', 'c', 't'].includes(gender)) {
@@ -21,12 +21,11 @@ export default async function handler(request, response) {
     let data = await res.json();
     let resultados = data.results || [];
 
-    // FILTRO POR PAÍS ESPECÍFICO
+    // Filtros
     if (country) {
       resultados = resultados.filter(model => model.country === country);
     }
 
-    // FILTRO POR REGIÓN (Agrupación manual de países)
     if (region) {
       const paisesPorRegion = {
         'europa': ['ES', 'FR', 'DE', 'IT', 'GB', 'RU', 'NL', 'PT', 'SE', 'NO', 'DK', 'FI', 'PL', 'RO', 'GR', 'CZ', 'HU', 'IE', 'AT', 'CH', 'BE', 'UA'],
@@ -34,18 +33,22 @@ export default async function handler(request, response) {
         'norteamerica': ['US', 'CA', 'MX'],
         'asia': ['PH', 'TH', 'VN', 'ID', 'MY', 'JP', 'KR', 'IN', 'CN', 'TW', 'HK']
       };
-
       const paisesValidos = paisesPorRegion[region] || [];
       resultados = resultados.filter(model => paisesValidos.includes(model.country));
     }
 
-    data.results = resultados;
-    data.count = resultados.length;
-    
+    // Aplicar paginación (offset y limit) DESPUÉS de filtrar
+    const totalResultados = resultados.length;
+    const resultadosPaginados = resultados.slice(parseInt(offset), parseInt(offset) + parseInt(limit));
+
     response.setHeader('Access-Control-Allow-Origin', '*');
     response.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate'); 
     
-    response.status(200).json(data);
+    response.status(200).json({
+      results: resultadosPaginados,
+      count: totalResultados,
+      hasMore: (parseInt(offset) + parseInt(limit)) < totalResultados
+    });
   } catch (error) {
     response.status(500).json({ error: 'Fallo el proxy', details: error.message });
   }
